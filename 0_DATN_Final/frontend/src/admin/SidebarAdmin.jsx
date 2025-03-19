@@ -36,12 +36,12 @@ function SidebarAdmin({ isSidebarOpen, toggleSidebar }) {
           </Link>
         </li>
         <li className="sidebar-item">
-          <Link to="/questions" className="sidebar-link">
+          <Link to="/list-question" className="sidebar-link">
             <i className="fas fa-question-circle"></i> Câu hỏi
           </Link>
         </li>
         <li className="sidebar-item">
-          <Link to="/answers" className="sidebar-link">
+          <Link to="/list-answer" className="sidebar-link">
             <i className="fas fa-check-circle"></i> Đáp án
           </Link>
         </li>

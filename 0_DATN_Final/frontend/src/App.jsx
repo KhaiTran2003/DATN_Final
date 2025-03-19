@@ -26,8 +26,10 @@ import AddCourse from './admin/courses/AddCourse.jsx';
 import MyContext from './Context/context.js';
 import CourseDetail from './admin/courses/CourseDetail.jsx';
 import EditCourse from './admin/courses/EditCourse.jsx';
-
+import ListQuestions from './admin/questions/ListQuestions.jsx';
+import ListAnswers from './admin/answers/ListAnswers.jsx';
 import ListLesson from './admin/lessons/ListLesson.jsx'
+import Lesson from './pages/Lesson.jsx';
 function App() {
   
   const [user, setUser] = useState(null);
@@ -73,6 +75,8 @@ function App() {
             <Route path='/course-detail/:courseId' element={<CourseDetail />} />
             <Route path='/edit-course/:courseId' element={<EditCourse />} />
             <Route path='/list-lesson' element={<ListLesson />} />
+            <Route path='/list-question' element={<ListQuestions />} />
+            <Route path='/list-answer' element={<ListAnswers />} />
           </>
         )}
 
@@ -86,6 +90,7 @@ function App() {
             <Route path='/courses' element={<Courses />} />
             <Route path='/reviews' element={<Reviews />} />
             <Route path='/contact' element={<Contact />} />
+            <Route path='/lessons' element={<Lesson />} />
           </>
         )}
         

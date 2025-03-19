@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CourseCard from './CourseCard';
 import '../css/css_pages/Courses.css';
-
+import { Link } from 'react-router-dom';
 function Courses() {
   const [courses, setCourses] = useState([]);
 
@@ -18,15 +18,17 @@ function Courses() {
       <div className="a-container">
         {courses.length > 0 ? (
           courses.map((course) => (
+          <Link key={course.id_course} to={`/lessons?courseId=${course.id_course}`}>
             <CourseCard
-              key={course.id_course}
               image={`http://localhost:5000${course.image}`}
               title={course.title}
               description={course.description}
               price={course.price}
               duration={course.duration}
             />
-          ))
+          </Link>
+        ))
+
         ) : (
           <p>Không có khóa học nào</p>
         )}
