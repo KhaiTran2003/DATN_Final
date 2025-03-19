@@ -1,0 +1,366 @@
+/* Container cho bảng */
+.user-table-container {
+  margin-top: 80px;
+  padding: 20px;
+  overflow-x: auto; /* Thêm khả năng cuộn ngang nếu bảng quá rộng */
+  margin-left: 250px; /* Đảm bảo bảng không bị che khuất bởi sidebar */
+  transition: margin-left 0.3s ease; /* Tạo hiệu ứng khi sidebar mở/đóng */
+  height: 100vh; /* Đảm bảo chiều cao bảng đầy đủ */
+  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi chiều rộng của bảng */
+  background-color: #f9f9f9; /* Màu nền sáng cho bảng */
+  border-radius: 8px;
+}
+
+/* Điều chỉnh khi sidebar thu nhỏ */
+.sidebar.collapsed + .user-table-container {
+  margin-left: 80px; /* Điều chỉnh margin khi sidebar thu nhỏ */
+}
+
+/* Bảng người dùng */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 16px;
+  text-align: left;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho bảng */
+}
+
+.user-table th, .user-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #007bff; /* Màu nền cho tiêu đề */
+  color: white;
+}
+
+.user-table tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+.user-table tr:hover {
+  background-color: #e2e2e2; /* Màu hover cho dòng */
+}
+
+/* Nút Add User */
+.add-user-btn {
+  background-color: #28a745; /* Màu nền xanh lá */
+  color: white; /* Màu chữ */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng cho nút */
+  border: none; /* Bỏ border */
+}
+
+/* Hiệu ứng hover nút */
+.add-user-btn:hover {
+  background-color: #218838; /* Màu nền khi hover */
+}
+
+/* Cột hành động */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none; /* Bỏ border */
+}
+
+.action-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.view-btn {
+  color: #007bff;
+}
+
+.view-btn:hover {
+  background-color: #e6f7ff;
+}
+
+.edit-btn {
+  color: #28a745;
+}
+
+.edit-btn:hover {
+  background-color: #d4edda;
+}
+
+.delete-btn {
+  color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #f8d7da;
+}
+
+.action-btn i {
+  margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+}
+
+/* Media query để điều chỉnh cho các màn hình nhỏ */
+@media screen and (max-width: 768px) {
+  .user-table-container {
+    margin-left: 10px; /* Điều chỉnh margin cho nhỏ gọn hơn */
+  }
+
+  .user-table th, .user-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+/* 
+Add user */
+/* Container cho form */
+.add-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f4f7fc; /* Màu nền sáng */
+  box-sizing: border-box;
+}
+
+/* Form */
+.add-user-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1000px; /* Đặt max-width cho form */
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các trường nhập liệu nằm ngang */
+  gap: 20px; /* Khoảng cách giữa các trường */
+  justify-content: space-between; /* Căn chỉnh các phần tử cho đều */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  width: 100%; /* Đảm bảo tiêu đề chiếm toàn bộ chiều rộng */
+}
+
+/* Các trường nhập liệu */
+.form-group {
+  width: 48%; /* Mỗi trường chiếm 48% chiều rộng */
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input, 
+.form-group select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Nút Submit */
+.submit-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+/* Hiệu ứng focus cho các trường nhập liệu */
+.form-group input:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Điều chỉnh cho input file */
+.form-group input[type="file"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Media query để điều chỉnh cho các màn hình nhỏ */
+@media screen and (max-width: 768px) {
+  .add-user-form {
+    width: 90%; /* Điều chỉnh form cho màn hình nhỏ */
+    padding: 20px;
+  }
+
+  .form-group {
+    width: 100%; /* Các trường sẽ chiếm toàn bộ chiều rộng */
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+/* User detail */
+.user-detail-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+}
+
+.user-detail-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.user-detail-form {
+  margin-left: 200px;
+  margin-top: 100px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px; /* Tăng chiều rộng cho form */
+  display: flex;
+  flex-direction: row; /* Đổi thành kiểu ngang */
+  flex-wrap: wrap;
+  justify-content: space-between; /* Cân chỉnh các nhóm */
+}
+
+.form-group {
+  margin-bottom: 20px;
+  flex-basis: 45%; /* Mỗi nhóm chiếm 45% chiều rộng */
+  box-sizing: border-box;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.form-group input[disabled], 
+.form-group select[disabled] {
+  background-color: #f2f2f2;
+}
+
+button.submit-btn, button.back-btn {
+  background-color: #28a745;
+  color: white;
+  font-size: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+button.submit-btn:hover, button.back-btn:hover {
+  background-color: #218838;
+}
+
+button.back-btn {
+  background-color: #007bff;
+}
+
+button.back-btn:hover {
+  background-color: #0056b3;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 800px; /* Tăng chiều rộng cho alert */
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 768px) {
+  .user-detail-form {
+    flex-direction: column; /* Trở lại kiểu dọc trên màn hình nhỏ */
+    padding: 20px;
+  }
+
+  .form-group {
+    flex-basis: 100%; /* Mỗi nhóm chiếm 100% chiều rộng trên màn hình nhỏ */
+  }
+}

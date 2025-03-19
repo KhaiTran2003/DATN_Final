@@ -1,0 +1,176 @@
+/* Container của Dashboard */
+.admin-dashboard-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    position: relative; /* Ensure content and sidebar don't overlap */
+}
+
+.sidebar {
+    display: block;
+    width: 250px;
+    background-color: #2d2f45;
+    color: white;
+    position: fixed; /* Fix sidebar to left of the screen */
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+    z-index: 1002; /* Keep sidebar above content */
+}
+
+.sidebar.collapsed {
+    width: 80px; /* Giảm chiều rộng của sidebar */
+}
+
+
+.sidebar.closed {
+    transform: translateX(-100%); /* Hides sidebar when closed */
+}
+
+/* Sidebar thu nhỏ */
+.sidebar.collapsed {
+    width: 70px; /* Thu nhỏ sidebar */
+}
+
+/* Các phần tử trong sidebar */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Căn chỉnh các item trong sidebar theo chiều dọc */
+    align-items: flex-start; /* Căn các item về bên trái */
+}
+
+.sidebar-item {
+    margin: 15px 0;
+    width: 100%; /* Đảm bảo tất cả các mục chiếm chiều rộng */
+}
+
+.sidebar-link {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex; /* Dùng flex để căn chỉnh các icon và text cùng một dòng */
+    align-items: center; /* Căn giữa icon và text theo chiều dọc */
+    transition: background-color 0.3s;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Sidebar item icon */
+.sidebar-link i {
+    margin-right: 10px; /* Khoảng cách giữa icon và tên */
+    font-size: 18px; /* Kích thước icon */
+}
+
+/* Khi sidebar bị thu nhỏ, chỉ hiển thị icon */
+.sidebar.collapsed .sidebar-link i {
+    margin-right: 0;
+}
+
+/* Thêm hiệu ứng hover cho icon */
+.sidebar-link:hover i {
+    color: #4c78a8; /* Đổi màu icon khi hover */
+}
+
+/* Tăng kích thước của icon khi sidebar mở rộng */
+.sidebar.open .sidebar-link i {
+    font-size: 20px; /* Tăng kích thước của icon */
+}
+
+.sidebar-link:hover {
+    background-color: #3a3f56;
+}
+
+/* Content Styles */
+.content {
+    margin-left: 250px; /* This gives space for the sidebar */
+    padding: 20px;
+    width: 100%;
+    transition: margin-left 0.3s ease; /* Adjust content position when sidebar opens/closes */
+}
+
+.navbar-admin {
+    background-color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f0f0f0;
+    z-index: 1001; /* Ensure navbar stays on top */
+}
+
+.navbar-admin-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.search-container {
+    flex-grow: 0.3;
+    margin: 0 10px;
+}
+
+.search-input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* Đảm bảo rằng menu-toggle và menu-icon hiển thị đúng */
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2000; /* Đảm bảo icon nằm trên các thành phần khác */
+}
+
+.menu-icon {
+    font-size: 30px; /* Đảm bảo kích thước icon lớn đủ để nhìn thấy */
+    color: #333; /* Màu sắc cho icon */
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Button thu nhỏ sidebar */
+.collapse-sidebar-btn {
+    position: absolute;
+    top: 50%;
+    left: 220px; /* Điều chỉnh vị trí của button thu nhỏ */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 1100;
+    transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+}
+
+/* Đảm bảo khi thu nhỏ màn hình, sidebar sẽ nằm dưới navbar */
+@media screen and (max-width: 768px) {
+    .admin-dashboard-container {
+        flex-direction: column; /* Thay đổi thành column để navbar và sidebar xếp chồng lên nhau */
+    }
+
+    .sidebar {
+        width: 100%; /* Sidebar chiếm toàn bộ chiều rộng */
+        position: relative; /* Sidebar trở thành phần tử trong dòng chảy tài liệu */
+        height: auto;
+        z-index: 0; /* Để sidebar nằm dưới navbar */
+    }
+
+    .content {
+        margin-left: 0; /* Không còn cần margin cho content */
+        width: 100%;
+        padding-left: 0;
+    }
+}

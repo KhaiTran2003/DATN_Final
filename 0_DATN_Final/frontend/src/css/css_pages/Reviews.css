@@ -1,0 +1,48 @@
+#reviews {
+    background: linear-gradient(to right, #5a2cd4, #29b6f6);
+    padding: 50px 0; /* Thêm padding cho không gian xung quanh */
+    text-align: center; /* Căn giữa nội dung */
+}
+
+.review-container {
+    max-width: 800px; /* Giới hạn chiều rộng của phần review */
+    margin: 0 auto; /* Căn giữa container */
+    padding: 20px;
+    background-color: #fff; /* Nền trắng cho phần review */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+    border-radius: 10px; /* Bo góc */
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem; /* Font size lớn cho tiêu đề */
+    color: #333; /* Màu chữ đậm cho tiêu đề */
+    margin-bottom: 10px;
+}
+
+h1 span {
+    color: #ff6347; /* Màu đỏ cam cho phần phụ */
+    font-style: italic; /* In nghiêng cho phần phụ */
+}
+
+.details-review {
+    font-size: 1.2rem; /* Kích thước font vừa phải */
+    color: #666; /* Màu chữ nhẹ nhàng */
+    line-height: 1.8; /* Khoảng cách giữa các dòng */
+    margin-top: 10px;
+}
+
+.details-review:hover {
+    color: #333; /* Thay đổi màu khi hover */
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
+}
+
+@media(max-width: 768px) {
+    h1 {
+        font-size: 2rem; /* Giảm kích thước chữ cho màn hình nhỏ */
+    }
+
+    .details-review {
+        font-size: 1rem; /* Giảm kích thước chữ mô tả */
+    }
+}
