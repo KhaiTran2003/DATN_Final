@@ -31,7 +31,7 @@ function SidebarAdmin({ isSidebarOpen, toggleSidebar }) {
           </Link>
         </li>
         <li className="sidebar-item">
-          <Link to="/lessons" className="sidebar-link">
+          <Link to="/list-lesson" className="sidebar-link">
             <i className="fas fa-chalkboard-teacher"></i> Bài học
           </Link>
         </li>

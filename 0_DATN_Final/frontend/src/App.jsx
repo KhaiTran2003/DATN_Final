@@ -26,6 +26,8 @@ import AddCourse from './admin/courses/AddCourse.jsx';
 import MyContext from './Context/context.js';
 import CourseDetail from './admin/courses/CourseDetail.jsx';
 import EditCourse from './admin/courses/EditCourse.jsx';
+
+import ListLesson from './admin/lessons/ListLesson.jsx'
 function App() {
   
   const [user, setUser] = useState(null);
@@ -57,7 +59,8 @@ function App() {
           </>
         )}
       <Routes>
-        {role === 'admin' && (
+        {/* xoa role === '' */}
+        { (role === 'admin' || role ==='') && (
           <>
             <Route path='/admin-dashboard' element={<AdminDashboard />} />
             <Route path='/list-course' element={<ListCourses />} />
@@ -69,6 +72,7 @@ function App() {
             <Route path='/delete-user' element={<DelUser />} />
             <Route path='/course-detail/:courseId' element={<CourseDetail />} />
             <Route path='/edit-course/:courseId' element={<EditCourse />} />
+            <Route path='/list-lesson' element={<ListLesson />} />
           </>
         )}
 

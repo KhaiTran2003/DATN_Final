@@ -17,6 +17,7 @@ function ListCourses() {
       try {
         const response = await axios.get('http://localhost:5000/api/courses');
         setCourses(response.data);
+        console.log(response.data)
       } catch (err) {
         setError('Có lỗi khi lấy dữ liệu khóa học.');
       } finally {
@@ -59,7 +60,7 @@ function ListCourses() {
   
 
   return (
-    <div>
+    <div class="flex justify-center items-center">
       <button onClick={toggleSidebar}>Toggle Sidebar</button>
       <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <NavbarAdmin />

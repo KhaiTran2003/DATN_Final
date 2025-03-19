@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import logo from '../images/LCMSlogo.jpg';
 import '../css/css_admin/AdminDashboard.css';
 
-function NavbarAdmin({ toggleSidebar }) {
+function NavbarAdmin(Props) {
   return (
     <nav className="navbar-admin">
       <div className="navbar-admin-container">
         {/* Menu Toggle */}
-        <div className="menu-toggle" onClick={toggleSidebar}>
+        <div className="menu-toggle">
           <button className="menu-icon">☰</button> {/* Hamburger Icon */}
         </div>
 
@@ -20,7 +20,9 @@ function NavbarAdmin({ toggleSidebar }) {
 
         {/* Thanh tìm kiếm */}
         <div className="search-container">
-          <input type="text" placeholder="Tìm kiếm..." className="search-input" />
+          <input type="text" placeholder="Tìm kiếm..." className="search-input"
+           onChange={Props.handleOnChange}
+           />
         </div>
 
         {/* Thông tin người dùng */}

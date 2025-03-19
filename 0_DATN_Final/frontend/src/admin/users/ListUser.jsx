@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 function ListUser() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [users, setUsers] = useState([]);
+  const [or_users,setOrUsers] = useState([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,6 +19,7 @@ function ListUser() {
       try {
         const response = await axios.get('http://localhost:5000/api/users');
         setUsers(response.data);
+        setOrUsers(response.data);
       } catch (err) {
         setError('Có lỗi khi lấy dữ liệu người dùng.');
       } finally {
@@ -52,12 +54,32 @@ function ListUser() {
     }
   };
   
-
+  function Myfilter(keyword){
+    if (!keyword || keyword.trim() === '') {
+      return or_users;
+    }
+  
+    const lowerKeyword = keyword.toLowerCase();
+  
+    return or_users.filter(user =>
+      user.fullname.toLowerCase().includes(lowerKeyword) ||
+      user.username.toLowerCase().includes(lowerKeyword) ||
+      user.email.toLowerCase().includes(lowerKeyword) ||
+      String(user.phone).toLowerCase().includes(lowerKeyword) ||
+      user.avatar.toLowerCase().includes(lowerKeyword) ||
+      // Chuyển giá trị is_active thành chuỗi để so sánh
+      user.is_active.toString().toLowerCase().includes(lowerKeyword)
+    );
+  }
+  function handleOnChange(event){
+    const keyword = event.target.value
+    setUsers(Myfilter(keyword))
+  }
   return (
     <div>
       <button onClick={toggleSidebar}>Toggle Sidebar</button>
       <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <NavbarAdmin />
+      <NavbarAdmin handleOnChange={handleOnChange}/>
 
       <div className="user-table-container">
         <h1>Danh sách người dùng</h1>

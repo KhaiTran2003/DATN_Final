@@ -356,7 +356,9 @@ app.put('/api/courses/:courseId', upload.single('image'), (req, res) => {
 
 // API GET để lấy dữ liệu các bài học (mã hiện tại của bạn)
 app.get('/api/lessons', (req, res) => {
-  db.query('SELECT * FROM lesson', (err, results) => {
+  console.log("query lessons")
+  db.query('SELECT ls.*, c.title as course_title, t.fullname '+
+    'FROM lesson ls join courses c on ls.course_id = c.id_course join users t on c.teacher_id = t.id_user', (err, results) => {
     if (err) {
       console.error('Lỗi khi truy vấn dữ liệu:', err);
       return res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' });
