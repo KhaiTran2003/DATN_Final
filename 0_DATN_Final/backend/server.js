@@ -249,6 +249,24 @@ app.get('/api/courses', (req, res) => {
   });
 });
 
+app.delete('/api/courses/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.query("DELETE FROM courses WHERE id_course = ?", [id], (err, result) => {
+    if (err) {
+      console.error("Lỗi server:", err);
+      return res.status(500).json({ message: "Lỗi server khi xóa khóa học" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Không tìm thấy khóa học" });
+    }
+
+    res.json({ message: "Xóa khóa học thành công!" });
+  });
+});
+
+
 app.post('/api/add_courses', upload.single('image'), (req, res) => {
   const { title, description, duration, teacher_id, price } = req.body;
   const image = req.file ? req.file.path : ''; // Lưu đường dẫn ảnh nếu có

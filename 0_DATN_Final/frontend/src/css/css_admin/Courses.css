@@ -1,115 +1,145 @@
-.add-course-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Container chính */
+.course-table-container {
+    max-width: 95%;
+    margin: 20px auto;
     padding: 20px;
-    margin-top: 120px;
-  }
-  
-  /* Form hiển thị theo chiều ngang */
-  .add-course-form {
     background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 800px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px; /* Tạo khoảng cách giữa các cột */
-    justify-content: space-between;
-  }
-  
-  .form-group {
-    flex: 1 1 48%; /* Chia form thành 2 cột, mỗi cột chiếm khoảng 48% */
-    min-width: 300px;
-  }
-  
-  .form-group label {
-    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề danh sách */
+.course-table-container h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Nút thêm khóa học */
+.add-user-btn {
     display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .form-group textarea {
-    height: 100px;
-    resize: none;
-  }
-  
-  .form-group input[type="file"] {
-    border: none;
-  }
-  
-  /* Nút submit */
-  .submit-btn {
+    margin: 10px auto;
+    padding: 10px 15px;
     background: #28a745;
     color: white;
-    padding: 12px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-    margin-top: 10px;
-  }
-  
-  .submit-btn:hover {
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.add-user-btn:hover {
     background: #218838;
-  }
-  
-  /* Thông báo thành công và lỗi */
-  .alert {
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: bold;
+}
+
+/* Bảng hiển thị khóa học */
+.course-table {
     width: 100%;
-  }
-  
-  .alert-success {
-    background-color: #d4edda;
-    color: #155724;
-  }
-  
-  .alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-  }
-  .add-course-btn {
-    padding-left: 0;
-    margin-top: 100px;
-    background-color: #4CAF50; /* Màu xanh lá */
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #fff;
+    font-size: 14px;
+}
+
+.course-table th, .course-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.course-table thead {
+    background: #007bff;
     color: white;
-    font-size: 16px;
     font-weight: bold;
-    padding: 10px 20px;
+}
+
+.course-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.course-table tbody tr:hover {
+    background: #e2e6ea;
+}
+
+/* Ảnh đại diện trong bảng */
+.course-table img {
+    width: 50px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Khu vực nút hành động */
+.actions {
+    display: flex;
+    gap: 5px;
+}
+
+/* Nút hành động */
+.action-btn {
+    padding: 6px 10px;
+    font-size: 13px;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .add-course-btn:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-  }
-  
-  .add-course-btn:active {
-    transform: scale(0.95);
-  }
-  @media (max-width: 1024px) {
-    .add-course-container {
-      margin-left: 0;
-      width: 100%;
-    }
-  }
-  
+    transition: 0.3s;
+}
+
+/* Màu từng nút */
+.view-btn {
+    background: #17a2b8;
+    color: white;
+}
+
+.edit-btn {
+    background: #ffc107;
+    color: black;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+/* Hover hiệu ứng */
+.view-btn:hover {
+    background: #138496;
+}
+
+.edit-btn:hover {
+    background: #e0a800;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+/* Phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.pagination button:hover {
+    background: #e9ecef;
+}
+
+.pagination button.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}

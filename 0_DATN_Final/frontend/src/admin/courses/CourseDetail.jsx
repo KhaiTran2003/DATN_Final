@@ -29,11 +29,11 @@ function CourseDetail() {
   }, [courseId]);
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-red-500 text-center mt-5">{error}</div>;
   }
 
   if (!course) {
-    return <div>Đang tải thông tin khóa học...</div>;
+    return <div className="text-center text-gray-500 mt-5">Đang tải thông tin khóa học...</div>;
   }
 
   const toggleSidebar = () => {
@@ -41,54 +41,50 @@ function CourseDetail() {
   };
 
   return (
-    <div className="course-detail-container">
-      <button onClick={toggleSidebar}>Thu nhỏ sidebar</button>
+    <div className="flex min-h-screen bg-gray-100">
       <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <NavbarAdmin />
-
-      <form className="course-detail-form">
-        <div className="form-group">
-          <label htmlFor="title">Tên khóa học:</label>
-          <input type="text" id="title" value={course.title} disabled />
+      <div className="flex-1 flex flex-col">
+        <NavbarAdmin />
+        <div className="flex justify-center items-center h-full p-6 mt-16">
+          <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 flex">
+            <div className="w-1/3 flex justify-center items-center">
+              <img src={course.image} alt={course.title} className="w-48 h-48 object-cover rounded-md" />
+            </div>
+            <div className="w-2/3 pl-6">
+              <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">Chi tiết khóa học</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-600 font-medium">Tên khóa học:</label>
+                  <input type="text" value={course.title} disabled className="w-full p-2 border rounded bg-gray-100" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">ID Giáo viên:</label>
+                  <input type="text" value={course.teacher_id} disabled className="w-full p-2 border rounded bg-gray-100" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">Giá:</label>
+                  <input type="text" value={course.price} disabled className="w-full p-2 border rounded bg-gray-100" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">Thời gian học:</label>
+                  <input type="text" value={course.duration} disabled className="w-full p-2 border rounded bg-gray-100" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">Trạng thái:</label>
+                  <select value={course.is_active ? 'Hoạt động' : 'Không hoạt động'} disabled className="w-full p-2 border rounded bg-gray-100">
+                    <option value="Hoạt động">Hoạt động</option>
+                    <option value="Không hoạt động">Không hoạt động</option>
+                  </select>
+                </div>
+              </div>
+              <div className="mt-6 flex justify-between">
+                <button onClick={() => navigate('/list-course')} className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Quay lại danh sách</button>
+                <Link to={`/edit-course/${course.id_course}`} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Sửa</Link>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="form-group">
-          <label htmlFor="teacher_id">ID Giáo viên:</label>
-          <input type="text" id="teacher_id" value={course.teacher_id} disabled />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="price">Giá:</label>
-          <input type="text" id="price" value={course.price} disabled />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="duration">Thời gian học:</label>
-          <input type="text" id="duration" value={course.duration} disabled />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="image">Ảnh đại diện:</label>
-          <img src={course.image} alt={course.title} width="100" />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="is_active">Trạng thái:</label>
-          <select id="is_active" value={course.is_active ? 'Hoạt động' : 'Không hoạt động'} disabled>
-            <option value="Hoạt động">Hoạt động</option>
-            <option value="Không hoạt động">Không hoạt động</option>
-          </select>
-        </div>
-
-        <button type="button" onClick={() => navigate('/list-course')} className="back-btn">
-          Quay lại danh sách
-        </button>
-        <Link to={`/edit-course/${course.id_course}`}>
-          <button className="submit-btn">
-            Sửa
-          </button>
-        </Link>
-      </form>
+      </div>
     </div>
   );
 }

@@ -77,11 +77,11 @@ function EditCourse() {
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-red-500 text-center mt-5">{error}</div>;
   }
 
   if (!course) {
-    return <div>Đang tải thông tin khóa học...</div>;
+    return <div className="text-center text-gray-500 mt-5">Đang tải thông tin khóa học...</div>;
   }
 
   const toggleSidebar = () => {
@@ -89,45 +89,44 @@ function EditCourse() {
   };
 
   return (
-    <div className="course-detail-container">
-      <button onClick={toggleSidebar}>Thu nhỏ sidebar</button>
+    <div className="flex min-h-screen bg-gray-100">
       <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <NavbarAdmin />
-
-      <form className="course-detail-form">
-        <div className="form-group">
-          <label htmlFor="title">Tên khóa học:</label>
-          <input type="text" id="title" value={course.title} onChange={handleChange} />
+      <div className="flex-1 flex flex-col">
+        <NavbarAdmin />
+        <div className="flex justify-center items-center h-full p-6 mt-16">
+          <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 flex">
+            <div className="w-1/3 flex flex-col items-center">
+              <img src={imagePreview} alt="Course" className="w-48 h-48 object-cover rounded-md mb-4" />
+              <input type="file" id="image" onChange={handleImageChange} className="mt-2" />
+            </div>
+            <div className="w-2/3 pl-6">
+              <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">Chỉnh sửa khóa học</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-600 font-medium">Tên khóa học:</label>
+                  <input type="text" id="title" value={course.title} onChange={handleChange} className="w-full p-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">ID Giáo viên:</label>
+                  <input type="text" id="teacher_id" value={course.teacher_id} onChange={handleChange} className="w-full p-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">Giá:</label>
+                  <input type="text" id="price" value={course.price} onChange={handleChange} className="w-full p-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-gray-600 font-medium">Thời gian học:</label>
+                  <input type="number" id="duration" value={course.duration} onChange={handleChange} className="w-full p-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+              </div>
+              <div className="mt-6 flex justify-between">
+                <button onClick={() => navigate('/list-course')} className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Quay lại danh sách</button>
+                <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Hoàn thành</button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="form-group">
-          <label htmlFor="teacher_id">ID Giảng viên:</label>
-          <input type="text" id="teacher_id" value={course.teacher_id} onChange={handleChange} />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="price">Giá:</label>
-          <input type="number" id="price" value={course.price} onChange={handleChange} />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="duration">Thời lượng (giờ):</label>
-          <input type="number" id="duration" value={course.duration} onChange={handleChange} />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="image">Hình ảnh:</label>
-          <input type="file" id="image" onChange={handleImageChange} />
-          {imagePreview && <img src={imagePreview} alt="Course" width="100" />}
-        </div>
-
-        <button type="button" onClick={() => navigate('/list-course')} className="back-btn">
-          Quay lại danh sách
-        </button>
-        <button type="button" onClick={handleSubmit} className="submit-btn">
-          Hoàn thành
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
