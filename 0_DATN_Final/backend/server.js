@@ -353,7 +353,6 @@ app.put('/api/courses/:courseId', upload.single('image'), (req, res) => {
 });
 
 
-
 // API GET để lấy dữ liệu các bài học (mã hiện tại của bạn)
 app.get('/api/lessons', (req, res) => {
   console.log("query lessons")
@@ -366,6 +365,104 @@ app.get('/api/lessons', (req, res) => {
     res.json(results);
   });
 });
+
+// API GET để lấy dữ liệu các bài học (mã hiện tại của bạn)
+// app.get('/api/lessons', (req, res) => {
+//   console.log("query lessons");
+  
+//   const sql = `
+//     SELECT ls.*, c.title AS course_title
+//     FROM lesson ls 
+//     JOIN courses c ON ls.course_id = c.id_course
+//   `;
+
+//   db.query(sql, (err, results) => {
+//     if (err) {
+//       console.error('Lỗi khi truy vấn dữ liệu:', err);
+//       return res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' });
+//     }
+//     res.json(results);
+//   });
+// });
+
+
+//lesson detail
+app.get('/api/lessons/:id', (req, res) => {
+  const { id } = req.params;
+  // Query database để lấy người dùng với userId
+  // Trả về thông tin người dùng
+  db.query('SELECT * FROM lesson WHERE id_lesson = ?', [id], (err, result) => {
+    if (err) {
+      res.status(500).json({ message: 'Server error' });
+    } else if (result.length === 0) {
+      res.status(404).json({ message: 'Không tìm thấy lesson' });
+    } else {
+      res.json(result[0]); // Trả về người dùng
+    }
+  });
+});
+//edit-lesson
+app.put('/api/lessons/:lessonId', upload.single('image'), async (req, res) => {
+  const lessonId = parseInt(req.params.lessonId);
+  const { title, description, duration, course_id, oldImage } = req.body;
+  const image = req.file ? `/uploads/images/${req.file.filename.replace(/\s+/g, "")}` : null;
+  const filePath = path.join(__dirname, oldImage);
+
+  try {
+        if (oldImage) {
+          fs.access(filePath, fs.constants.F_OK, (err) => {
+              if (!err) {
+                  fs.unlink(filePath, (unlinkErr) => {
+                      if (unlinkErr) console.error('Lỗi khi xóa ảnh:', unlinkErr);
+                      else console.log('Ảnh cũ đã được xóa');
+                  });
+              }
+          });
+      }
+      
+      // Kiểm tra course_id hợp lệ & lấy title từ bảng courses
+      const courseQuery = `SELECT title FROM courses WHERE id_course = ?`;
+      db.query(courseQuery, [course_id], (courseErr, courseResults) => {
+          if (courseErr || courseResults.length === 0) {
+              return res.status(400).json({ error: "Course không hợp lệ" });
+          }
+
+          const courseTitle = courseResults[0].title; // Lấy title của khóa học
+
+          // Cập nhật thông tin bài học
+          let query = `UPDATE lesson SET title = ?, description = ?, duration = ?, course_id = ?, course_title = ?`;
+          const queryParams = [title, description, duration, course_id, courseTitle];
+
+          if (image) {
+              query += ', image = ?';
+              queryParams.push(image);
+          }
+
+          query += ' WHERE id_lesson = ?';
+          queryParams.push(lessonId);
+
+          db.query(query, queryParams, (err, results) => {
+              if (err) {
+                  console.error(err);
+                  return res.status(500).send('Internal Server Error');
+              }
+
+              if (results.affectedRows === 0) {
+                  return res.status(404).send('Lesson not found');
+              }
+
+              res.status(200).json({
+                  message: 'Lesson updated successfully',
+                  lesson: { id_lesson: lessonId, title, description, duration, image, course_id, course_title: courseTitle }
+              });
+          });
+      });
+  } catch (error) {
+      console.error('Lỗi cập nhật bài học:', error);
+      res.status(500).json({ error: 'Lỗi máy chủ' });
+  }
+});
+
 
 // API GET để lấy dữ liệu các câu hỏi(mã hiện tại của bạn)
 app.get('/api/questions', (req, res) => {

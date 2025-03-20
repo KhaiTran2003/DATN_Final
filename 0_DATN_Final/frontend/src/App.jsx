@@ -30,6 +30,7 @@ import ListQuestions from './admin/questions/ListQuestions.jsx';
 import ListAnswers from './admin/answers/ListAnswers.jsx';
 import ListLesson from './admin/lessons/ListLesson.jsx'
 import Lesson from './pages/Lesson.jsx';
+import EditLesson from './admin/lessons/EditLesson.jsx';
 function App() {
   
   const [user, setUser] = useState(null);
@@ -77,6 +78,7 @@ function App() {
             <Route path='/list-lesson' element={<ListLesson />} />
             <Route path='/list-question' element={<ListQuestions />} />
             <Route path='/list-answer' element={<ListAnswers />} />
+            <Route path='/edit-lesson/:lessonId' element={<EditLesson />} />
           </>
         )}
 
