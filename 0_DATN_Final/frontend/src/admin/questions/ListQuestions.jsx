@@ -3,10 +3,14 @@ import SidebarAdmin from "../SidebarAdmin";
 import NavbarAdmin from "../NavbarAdmin";
 import axios from "axios";
 import Table from "../../compunents/Table";
+import { useNavigate } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
+
 const ListQuestions = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [questionList, setQuestionList] = useState([]);
     const [displayList, setDisplayList] = useState([]);
+    const navigate = useNavigate(); // Điều hướng trang
 
     // Phân trang
     const [currentPage, setCurrentPage] = useState(1);
@@ -54,9 +58,10 @@ const ListQuestions = () => {
               );
     };
 
-    function handleOnClick() {
-        console.log("Row clicked!");
-    }
+    // Xử lý thêm câu hỏi
+    const handleAddQuestion = () => {
+        navigate("/add-question");
+    };
 
     // Phân trang
     const indexOfLastRow = currentPage * rowsPerPage;
@@ -66,13 +71,29 @@ const ListQuestions = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <div className="flex items-center relative h-[100vh]">
+        <div className="flex min-h-screen">
             <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-            <div className="ml-[250px] w-full h-[80%] items-start">
+
+            <div className="flex-1 p-6 ml-64 mt-15">
                 <NavbarAdmin handleOnChange={handleOnChange} />
-                <button className="add-course-btn">Thêm mới</button>
-                <div className="mt-[40px] mx-[40px] w-[90%] h-full">
-                    <Table data={currentRows} handleOnChange={handleOnClick} />
+
+                {/* Tiêu đề + Nút thêm mới */}
+                <div className="relative flex justify-between items-center mt-12 mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-700">Danh sách câu hỏi</h2>
+
+                    <div className="absolute right-0 top-[-10px]">
+                        <button
+                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 flex items-center shadow-md transition"
+                            onClick={handleAddQuestion}
+                        >
+                            <FaPlus className="mr-2" /> Thêm câu hỏi
+                        </button>
+                    </div>
+                </div>
+
+                {/* Bảng danh sách câu hỏi */}
+                <div className="mt-6 mx-auto max-w-6xl bg-white p-6 rounded-lg shadow-lg">
+                    <Table data={currentRows} handleOnChange={() => {}} />
 
                     {/* Pagination */}
                     <div className="flex justify-center mt-4">
@@ -80,7 +101,9 @@ const ListQuestions = () => {
                             <button
                                 key={i}
                                 onClick={() => paginate(i + 1)}
-                                className={`px-4 py-2 mx-1 border ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                                className={`px-4 py-2 mx-1 border rounded-md ${
+                                    currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+                                }`}
                             >
                                 {i + 1}
                             </button>

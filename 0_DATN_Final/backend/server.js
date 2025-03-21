@@ -13,6 +13,13 @@ const contactRoutes = require('./contact');
 app.use("/api", contactRoutes);
 app.use(cors());
 app.use(bodyParser.json()); // Giúp Express xử lý dữ liệu JSON từ request body
+// Tắt cache trên các trang sau khi logout
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
 
 const formatFile = (fileName)=>{
   const parts = fileName.split('.');
@@ -97,22 +104,41 @@ app.post('/api/signup', upload.single('avatar'), (req, res) => {
   });
 });
 
+//user-detail
+const baseUrl = "http://localhost:5000";
 
-//user detail
-app.get('/api/users/:userId', (req, res) => {
-  const { userId } = req.params;
-  // Query database để lấy người dùng với userId
-  // Trả về thông tin người dùng
-  db.query('SELECT * FROM users WHERE id_user = ?', [userId], (err, result) => {
+app.get("/api/users/:id", (req, res) => {
+  const userId = req.params.id;
+
+  const sql = `
+    SELECT u.*, r.name AS role
+    FROM users u
+    JOIN user_role ur ON u.id_user = ur.id_user
+    JOIN role r ON ur.id_role = r.id_role
+    WHERE u.id_user = ?
+  `;
+
+  db.query(sql, [userId], (err, results) => {
     if (err) {
-      res.status(500).json({ message: 'Server error' });
-    } else if (result.length === 0) {
-      res.status(404).json({ message: 'Không tìm thấy người dùng' });
-    } else {
-      res.json(result[0]); // Trả về người dùng
+      console.error("Lỗi khi truy vấn dữ liệu:", err);
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu", error: err.message });
     }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    }
+
+    let user = results[0];
+
+    // Sửa đường dẫn avatar để có URL đầy đủ
+    if (user.avatar) {
+      user.avatar = `${baseUrl}${user.avatar}`;
+    }
+
+    res.json(user);
   });
 });
+
 //delete user
 app.delete('/api/users/:id', (req, res) => {
   const { id } = req.params;
@@ -178,62 +204,6 @@ app.put('/api/users/:userId', upload.single('avatar'), (req, res) => {
 
     // Trả về phản hồi thành công
     res.status(200).json({ message: 'User updated successfully', user: { id_user: userId, fullname, username, email, phone, avatar, isActive } });
-  });
-});
-
-app.post('/api/users/update-role', (req, res) => {
-  const { user_id } = req.body;
-
-  if (!user_id) {
-    return res.status(400).json({ message: 'Thiếu user_id' });
-  }
-
-  // Lấy role hiện tại của user
-  const getCurrentRoleQuery = `
-    SELECT r.name FROM user_role ur
-    JOIN role r ON ur.role_id = r.id
-    WHERE ur.user_id = ?
-  `;
-
-  db.query(getCurrentRoleQuery, [user_id], (err, results) => {
-    if (err) {
-      console.error('Lỗi lấy role:', err);
-      return res.status(500).json({ message: 'Lỗi lấy role' });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User chưa có role' });
-    }
-
-    const currentRole = results[0].name;
-    const newRole = currentRole === 'student' ? 'teacher' : 'student';
-
-    // Lấy role_id mới
-    const getRoleIdQuery = 'SELECT id FROM role WHERE name = ?';
-
-    db.query(getRoleIdQuery, [newRole], (err, roleResults) => {
-      if (err) {
-        console.error('Lỗi lấy role_id:', err);
-        return res.status(500).json({ message: 'Lỗi lấy role' });
-      }
-
-      if (roleResults.length === 0) {
-        return res.status(404).json({ message: 'Vai trò mới không tồn tại' });
-      }
-
-      const newRoleId = roleResults[0].id;
-
-      // Cập nhật role mới
-      const updateRoleQuery = 'UPDATE user_role SET role_id = ? WHERE user_id = ?';
-
-      db.query(updateRoleQuery, [newRoleId, user_id], (err, result) => {
-        if (err) {
-          console.error('Lỗi cập nhật role:', err);
-          return res.status(500).json({ message: 'Lỗi cập nhật role' });
-        }
-        res.status(200).json({ message: `Chuyển đổi role thành ${newRole} thành công!`, newRole });
-      });
-    });
   });
 });
 
@@ -516,28 +486,6 @@ app.get('/api/users', (req, res) => {
     res.json(results);
   });
 });
-// app.get('/api/users', async (req, res) => {
-//   try {
-//     const sql = `
-//       SELECT u.id_user, u.fullname, u.username, u.email, u.phone, u.avatar, u.is_active, 
-//              COALESCE(GROUP_CONCAT(r.name SEPARATOR ', '), 'Chưa có vai trò') AS roles
-//       FROM users u
-//       LEFT JOIN user_role ur ON u.id_user = ur.id_user
-//       LEFT JOIN role r ON ur.id_role = r.id_role
-//       GROUP BY u.id_user;
-//     `;
-
-//     const users = await db.execute(sql); // 🔥 Sửa lỗi ở đây
-
-//     console.log("Dữ liệu từ DB:", users); // Debug để kiểm tra dữ liệu trả về
-
-//     res.json(users[0]); // 🔥 Lấy `users[0]` vì `db.execute()` trả về [rows, fields]
-//   } catch (error) {
-//     console.error("Lỗi khi lấy danh sách người dùng:", error);
-//     res.status(500).json({ message: "Lỗi khi lấy danh sách người dùng", error: error.message });
-//   }
-// });
-
 
 // API GET để lấy dữ liệu các answers(mã hiện tại của bạn)
 app.get('/api/answers', (req, res) => {
