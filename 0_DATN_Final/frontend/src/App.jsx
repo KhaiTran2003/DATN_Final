@@ -21,7 +21,6 @@ import NavbarTeacher from './teacher/NavbarTeacher.jsx'
 import AddUser from './admin/users/AddUser.jsx'
 import UserDetail from './admin/users/UserDetail.jsx';
 import EditUser from './admin/users/EditUser.jsx';
-import DelUser from './admin/users/DelUser.jsx';
 import AddCourse from './admin/courses/AddCourse.jsx';
 import MyContext from './Context/context.js';
 import CourseDetail from './admin/courses/CourseDetail.jsx';
@@ -31,6 +30,7 @@ import ListAnswers from './admin/answers/ListAnswers.jsx';
 import ListLesson from './admin/lessons/ListLesson.jsx'
 import Lesson from './pages/Lesson.jsx';
 import EditLesson from './admin/lessons/EditLesson.jsx';
+import AddLesson from './admin/lessons/AddLesson.jsx';
 function App() {
   
   const [user, setUser] = useState(null);
@@ -72,13 +72,13 @@ function App() {
             <Route path='/list-user' element={<ListUser />} />
             <Route path='/add-user' element={<AddUser />} />
             <Route path='/add-course' element={<AddCourse />} />
-            <Route path='/delete-user' element={<DelUser />} />
             <Route path='/course-detail/:courseId' element={<CourseDetail />} />
             <Route path='/edit-course/:courseId' element={<EditCourse />} />
             <Route path='/list-lesson' element={<ListLesson />} />
             <Route path='/list-question' element={<ListQuestions />} />
             <Route path='/list-answer' element={<ListAnswers />} />
             <Route path='/edit-lesson/:lessonId' element={<EditLesson />} />
+            <Route path='/add-lesson' element={<AddLesson />} />
           </>
         )}
 

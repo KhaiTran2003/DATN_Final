@@ -6,32 +6,43 @@
     position: relative; /* Ensure content and sidebar don't overlap */
 }
 
+/* Sidebar cố định bên trái */
 .sidebar {
-    display: block;
     width: 250px;
     background-color: #2d2f45;
     color: white;
-    position: fixed; /* Fix sidebar to left of the screen */
-    height: 100%;
+    position: fixed;
+    height: 100vh;
     top: 0;
     left: 0;
-    transition: transform 0.3s ease;
-    z-index: 1002; /* Keep sidebar above content */
+    transition: width 0.3s ease, transform 0.3s ease;
+    z-index: 1002; /* Giữ sidebar trên nội dung */
 }
 
-.sidebar.collapsed {
-    width: 80px; /* Giảm chiều rộng của sidebar */
-}
-
-
+/* Khi Sidebar bị đóng */
 .sidebar.closed {
-    transform: translateX(-100%); /* Hides sidebar when closed */
+    width: 70px; /* Sidebar thu nhỏ */
 }
 
-/* Sidebar thu nhỏ */
-.sidebar.collapsed {
-    width: 70px; /* Thu nhỏ sidebar */
+/* Ẩn Sidebar khi cần */
+.sidebar.hidden {
+    transform: translateX(-100%);
 }
+
+/* Nội dung chính phải dịch sang phải để không che Sidebar */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+    transition: margin-left 0.3s ease;
+}
+
+/* Khi Sidebar thu nhỏ */
+.content.sidebar-collapsed {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+}
+
 
 /* Các phần tử trong sidebar */
 .sidebar-menu {

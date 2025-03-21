@@ -8,55 +8,73 @@ import { Link } from 'react-router-dom';
 function ListCourses() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [courses, setCourses] = useState([]);
-  const [displayList, setDisplayList] = useState([]);
-
-  // Phân trang
+  const [originalCourses, setOriginalCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
   const rowsPerPage = 10;
-
-  useEffect(() => {
-    async function fetchCourses() {
-      try {
-        const response = await axios.get('http://localhost:5000/api/courses');
-        setCourses(response.data);
-        setDisplayList(response.data);
-      } catch (err) {
-        console.error("Có lỗi khi lấy danh sách khóa học.", err);
-      }
-    }
-    fetchCourses();
-  }, []);
-
-  // Phân trang
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = displayList.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(displayList.length / rowsPerPage);
+  const currentRows = courses.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(courses.length / rowsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/courses');
+        setCourses(response.data);
+        setOriginalCourses(response.data);
+      } catch (err) {
+        console.error('Lỗi khi lấy danh sách khóa học:', err);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   const handleDeleteCourse = async (id) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa khóa học này không?")) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa khóa học này không?')) {
       try {
         await axios.delete(`http://localhost:5000/api/courses/${id}`);
-        const updatedCourses = courses.filter(course => course.id_course !== id);
-        setCourses(updatedCourses);
-        setDisplayList(updatedCourses);
-        alert("Xóa khóa học thành công!");
+        const updated = originalCourses.filter(course => course.id_course !== id);
+        setCourses(updated);
+        setOriginalCourses(updated);
+        alert('Xóa khóa học thành công!');
       } catch (error) {
-        alert("Có lỗi xảy ra khi xóa khóa học.");
+        alert('Có lỗi xảy ra khi xóa khóa học.');
       }
     }
   };
 
+  const handleSearchChange = (event) => {
+    const keyword = event.target.value.toLowerCase();
+    setCurrentPage(1);
+
+    if (!keyword.trim()) {
+      setCourses(originalCourses);
+      return;
+    }
+
+    const filtered = originalCourses.filter(course =>
+      course.title?.toLowerCase().includes(keyword) ||
+      course.teacher_id?.toString().toLowerCase().includes(keyword) ||
+      course.price?.toString().toLowerCase().includes(keyword) ||
+      course.duration?.toString().toLowerCase().includes(keyword) ||
+      course.is_active?.toString().toLowerCase().includes(keyword)
+    );
+
+    setCourses(filtered);
+  };
+
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-
-      {/* Nội dung chính */}
+      <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <div className="flex-1 p-6 ml-64">
-        <NavbarAdmin />
+        <NavbarAdmin handleOnChange={handleSearchChange} />
 
         <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg mt-10">
           <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">Danh sách khóa học</h2>
@@ -79,7 +97,7 @@ function ListCourses() {
                   <th className="border border-gray-300 px-4 py-2 text-left">Giảng viên</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Giá</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Thời gian</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Ảnh đại diện</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Ảnh</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Trạng thái</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Hành động</th>
                 </tr>
@@ -110,8 +128,8 @@ function ListCourses() {
                           <FaEdit className="mr-1" /> Sửa
                         </button>
                       </Link>
-                      <button 
-                        className="text-red-500 hover:underline flex items-center" 
+                      <button
+                        className="text-red-500 hover:underline flex items-center"
                         onClick={() => handleDeleteCourse(course.id_course)}
                       >
                         <FaTrashAlt className="mr-1" /> Xóa
@@ -129,7 +147,7 @@ function ListCourses() {
               <button
                 key={i}
                 onClick={() => paginate(i + 1)}
-                className={`px-4 py-2 mx-1 border rounded-md ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                className={`px-4 py-2 mx-1 border rounded-md ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
               >
                 {i + 1}
               </button>

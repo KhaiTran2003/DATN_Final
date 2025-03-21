@@ -30,14 +30,24 @@ const Table = (Props) => {
                                     {row[header]}
                                 </div>
                             ))}
-                            <div className="w-[200px] p-3 flex space-x-2">
-                                <button className="action-btn edit-btn" onClick={() => Props.handleEdit(id)}>
-                                    <FaEdit /> Sửa
+                            <div className="w-[200px] p-3 flex space-x-3">
+                                <button
+                                    className="flex items-center space-x-1 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded shadow transition"
+                                    onClick={() => Props.handleEdit(id)}
+                                >
+                                    <FaEdit className="text-sm" />
+                                    <span>Sửa</span>
                                 </button>
-                                <button className="action-btn delete-btn" onClick={() => Props.handleDelete(id)}>
-                                    <FaTrashAlt /> Xóa
+
+                                <button
+                                    className="flex items-center space-x-1 px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded shadow transition"
+                                    onClick={() => Props.handleDelete(id)}
+                                >
+                                    <FaTrashAlt className="text-sm" />
+                                    <span>Xóa</span>
                                 </button>
                             </div>
+
                         </div>
                     );
                 })}

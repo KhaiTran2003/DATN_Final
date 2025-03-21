@@ -1,68 +1,45 @@
-// src/components/SidebarAdmin.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/css_admin/AdminDashboard.css'
+
 function SidebarAdmin({ isSidebarOpen, toggleSidebar }) {
   return (
-    <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-      {/* Hamburger Icon */}
-      <div className="menu-toggle" onClick={toggleSidebar}>
-        <button className="menu-icon">☰</button> {/* Hamburger Icon */}
+    <div className={`fixed top-0 left-0 h-full bg-gray-900 text-white transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-16'}`}>
+      {/* Nút thu nhỏ sidebar */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+        <h2 className={`text-lg font-semibold transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+          Admin Panel
+        </h2>
+        <button onClick={toggleSidebar} className="text-white focus:outline-none">
+          ☰
+        </button>
       </div>
 
-      <div className="sidebar-header">
-        {/* Thêm logo hoặc các mục khác trong sidebar */}
-      </div>
-
-      <ul className="sidebar-menu">
-        <li className="sidebar-item">
-          <Link to="/admin-dashboard" className="sidebar-link">
-            <i className="fas fa-tachometer-alt"></i> Dashboard
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/list-user" className="sidebar-link">
-            <i className="fas fa-users"></i> Người dùng
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/list-course" className="sidebar-link">
-            <i className="fas fa-book-open"></i> Khóa học
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/list-lesson" className="sidebar-link">
-            <i className="fas fa-chalkboard-teacher"></i> Bài học
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/list-question" className="sidebar-link">
-            <i className="fas fa-question-circle"></i> Câu hỏi
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/list-answer" className="sidebar-link">
-            <i className="fas fa-check-circle"></i> Đáp án
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/learning-path" className="sidebar-link">
-            <i className="fas fa-map-signs"></i> Learning Path
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/progress" className="sidebar-link">
-            <i className="fas fa-trophy"></i> Progress
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link to="/logout" className="sidebar-link">
-            <i className="fas fa-sign-out-alt"></i> Log Out
-          </Link>
-        </li>
+      {/* Danh sách menu */}
+      <ul className="mt-4">
+        <SidebarItem to="/admin-dashboard" icon="fas fa-tachometer-alt" label="Dashboard" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/list-user" icon="fas fa-users" label="Người dùng" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/list-course" icon="fas fa-book-open" label="Khóa học" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/list-lesson" icon="fas fa-chalkboard-teacher" label="Bài học" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/list-question" icon="fas fa-question-circle" label="Câu hỏi" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/list-answer" icon="fas fa-check-circle" label="Đáp án" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/learning-path" icon="fas fa-map-signs" label="Learning Path" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/progress" icon="fas fa-trophy" label="Progress" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/logout" icon="fas fa-sign-out-alt" label="Log Out" isSidebarOpen={isSidebarOpen} />
       </ul>
     </div>
   );
 }
+
+/* Component hiển thị từng item của Sidebar */
+const SidebarItem = ({ to, icon, label, isSidebarOpen }) => (
+  <li className="group relative">
+    <Link to={to} className="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition">
+      <i className={`${icon} text-lg`}></i>
+      <span className={`ml-3 text-sm font-medium transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+        {label}
+      </span>
+    </Link>
+  </li>
+);
 
 export default SidebarAdmin;
