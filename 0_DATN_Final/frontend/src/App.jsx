@@ -88,7 +88,7 @@ function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/lessons" element={<Lesson />} />
+          <Route path="/lesson" element={<Lesson />} />
 
           {/* 🔹 Protected Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>

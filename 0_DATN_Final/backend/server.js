@@ -10,6 +10,9 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const contactRoutes = require('./contact');
 
+const {getLessonByCourseId, } = require("./api/lessson_api" )
+const {getQuestionByLessonId, } = require("./api/question_api" )
+
 app.use("/api", contactRoutes);
 app.use(cors());
 app.use(bodyParser.json()); // Giúp Express xử lý dữ liệu JSON từ request body
@@ -562,7 +565,25 @@ app.get('/', (req, res) => {
   return res.send("hello world");
 });
 
+//////// route fro lesson
+app.get('/api/courses/:courseId/lessons', async (req,res) =>{
+  const courseId = parseInt(req.params.courseId);
+  const results =await  getLessonByCourseId(courseId)
+  console.log('results+',results)
+  return res.json(results)
+})
+
+//////// route for questions
+app.get('/api/lesson/:lessonId', async (req,res) =>{
+  const lesson_id = parseInt(req.params.lessonId);
+  const results =await  getQuestionByLessonId(lesson_id)
+  console.log('results+',results)
+  return res.json(results)
+})
+
 // Khởi động server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+
