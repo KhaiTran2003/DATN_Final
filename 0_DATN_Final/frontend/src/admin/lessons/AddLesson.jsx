@@ -50,7 +50,7 @@ function AddLesson() {
 
       setMessage('Thêm bài học thành công!');
       setMessageType('success');
-      setTimeout(() => navigate('/list-lesson'), 2000);
+      setTimeout(() => navigate('/list-lesson'), 1000);
     } catch (error) {
       setMessage(error.message);
       setMessageType('error');
@@ -134,11 +134,12 @@ function AddLesson() {
                 >
                   <option value="">-- Chọn khóa học --</option>
                   {courses.map((course) => (
-                    <option key={course.id} value={course.id}>
+                    <option key={course.id_course} value={course.id_course}>
                       {course.title}
                     </option>
                   ))}
                 </select>
+
               </div>
 
               <button

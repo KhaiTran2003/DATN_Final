@@ -75,7 +75,10 @@ function EditLesson() {
       formData.append("description", lesson.description);
       formData.append("duration", lesson.duration);
       formData.append("course_id", lesson.course_id);
-      formData.append("oldImage", oldImage);
+      if (oldImage) {
+        formData.append("oldImage", oldImage);
+      }
+      
 
       if (lesson.image) formData.append("image", lesson.image);
 

@@ -25,7 +25,8 @@ import ListLesson from "./admin/lessons/ListLesson";
 import EditLesson from "./admin/lessons/EditLesson";
 import AddLesson from "./admin/lessons/AddLesson";
 import TeacherDashboard from "./teacher/TeacherDashboard";
-
+import Result from "./pages/Result.jsx";
+import AddQuestion from "./admin/questions/AddQuestion.jsx";
 function App() {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
@@ -89,6 +90,7 @@ function App() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/lesson" element={<Lesson />} />
+          <Route path="/result" element={<Result />} />
 
           {/* 🔹 Protected Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
@@ -106,6 +108,7 @@ function App() {
             <Route path="/list-lesson" element={<ListLesson />} />
             <Route path="/edit-lesson/:lessonId" element={<EditLesson />} />
             <Route path="/add-lesson" element={<AddLesson />} />
+            <Route path="/add-question" element={<AddQuestion />} />
           </Route>
 
           {/* 🔹 Protected Teacher Routes */}
