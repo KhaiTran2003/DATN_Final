@@ -64,7 +64,8 @@ function ListUser() {
       user.email.toLowerCase().includes(lowerKeyword) ||
       String(user.phone).toLowerCase().includes(lowerKeyword) ||
       user.avatar.toLowerCase().includes(lowerKeyword) ||
-      user.is_active.toString().toLowerCase().includes(lowerKeyword)
+      user.is_active.toString().toLowerCase().includes(lowerKeyword) ||
+      (user.role && user.role.toLowerCase().includes(lowerKeyword))
     );
   };
 
@@ -106,6 +107,7 @@ function ListUser() {
                       <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
                       <th className="border border-gray-300 px-4 py-2 text-left">SĐT</th>
                       <th className="border border-gray-300 px-4 py-2 text-left">Ảnh đại diện</th>
+                      <th className="border border-gray-300 px-4 py-2 text-left">Role</th>
                       <th className="border border-gray-300 px-4 py-2 text-left">Trạng thái</th>
                       <th className="border border-gray-300 px-4 py-2 text-left">Hành động</th>
                     </tr>
@@ -120,6 +122,7 @@ function ListUser() {
                         <td className="border border-gray-300 px-4 py-2">
                           <img src={`http://localhost:5000/${user.avatar}`} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
                         </td>
+                        <td className="border border-gray-300 px-4 py-2">{user.role || 'N/A'}</td>
                         <td className="border border-gray-300 px-4 py-2">
                           <span className={`px-3 py-1 rounded-full text-white ${user.is_active ? 'bg-green-500' : 'bg-red-500'}`}>
                             {user.is_active ? 'Hoạt động' : 'Không hoạt động'}

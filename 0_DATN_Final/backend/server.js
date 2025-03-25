@@ -116,9 +116,10 @@ app.get("/api/users/:id", (req, res) => {
   const sql = `
     SELECT u.*, r.name AS role
     FROM users u
-    JOIN user_role ur ON u.id_user = ur.id_user
-    JOIN role r ON ur.id_role = r.id_role
+    LEFT JOIN user_role ur ON u.id_user = ur.id_user
+    LEFT JOIN role r ON ur.id_role = r.id_role
     WHERE u.id_user = ?
+
   `;
 
   db.query(sql, [userId], (err, results) => {
@@ -160,31 +161,24 @@ app.delete('/api/users/:id', (req, res) => {
   });
 });
 
-
-// API PUT cập nhật thông tin người dùng (bao gồm avatar) edit-user
 app.put('/api/users/:userId', upload.single('avatar'), (req, res) => {
-
   const userId = parseInt(req.params.userId);
-  const { fullname, username, email, phone, isActive, oldAvatar } = req.body;
-  const avatar = req.file ? `/uploads/images/${req.file.filename.replace(/\s+/g,"")}` : null;
-  const filePath = path.join(__dirname, oldAvatar);
+  const { fullname, username, email, phone, isActive, oldAvatar, role } = req.body;
+  const avatar = req.file ? `/uploads/images/${req.file.filename.replace(/\s+/g, "")}` : null;
 
-  console.log(filePath)
-  // Delete the file
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.error('Error deleting file:', err);
-      // Handle the error appropriately (e.g., return a response with error status)
-      return;
-    }
-    console.log('File deleted successfully');
-    // Proceed with further actions (e.g., sending a success response to the client)
-  });
-  // Cập nhật thông tin người dùng trong cơ sở dữ liệu
+  // Xóa ảnh cũ nếu có ảnh mới
+  if (req.file && oldAvatar) {
+    const filePath = path.join(__dirname, oldAvatar);
+    fs.unlink(filePath, (err) => {
+      if (err) console.error('Error deleting file:', err);
+      else console.log('Old avatar deleted successfully');
+    });
+  }
+
+  // Cập nhật thông tin người dùng
   let query = `UPDATE users SET fullname = ?, username = ?, email = ?, phone = ?, is_active = ?`;
   const queryParams = [fullname, username, email, phone, isActive === 'Hoạt động' ? 1 : 0];
 
-  // Nếu có ảnh đại diện, thêm vào câu lệnh SQL
   if (avatar) {
     query += ', avatar = ?';
     queryParams.push(avatar);
@@ -193,22 +187,61 @@ app.put('/api/users/:userId', upload.single('avatar'), (req, res) => {
   query += ' WHERE id_user = ?';
   queryParams.push(userId);
 
-  // Thực hiện truy vấn SQL
-   db.query(query, queryParams, (err, results) => {
+  db.query(query, queryParams, (err, results) => {
     if (err) {
-      console.error(err); // Log chi tiết lỗi nếu có
+      console.error(err);
       return res.status(500).send('Internal Server Error');
     }
 
-    // Kiểm tra xem có người dùng nào bị ảnh hưởng không
     if (results.affectedRows === 0) {
       return res.status(404).send('User not found');
     }
 
-    // Trả về phản hồi thành công
-    res.status(200).json({ message: 'User updated successfully', user: { id_user: userId, fullname, username, email, phone, avatar, isActive } });
+    // Tiếp theo: xử lý cập nhật role
+    const teacherRoleId = 2;
+    const userRoleId = 3;
+    const roleId = role === 'teacher' ? teacherRoleId : userRoleId;
+
+    // Kiểm tra xem user đã có role chưa
+    db.query('SELECT * FROM user_role WHERE id_user = ?', [userId], (err, roleCheck) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error checking user role');
+      }
+
+      const queryRole = roleCheck.length > 0
+        ? 'UPDATE user_role SET id_role = ? WHERE id_user = ?'
+        : 'INSERT INTO user_role (id_user, id_role) VALUES (?, ?)';
+
+      const paramsRole = roleCheck.length > 0
+        ? [roleId, userId]
+        : [userId, roleId]; // INSERT cần thứ tự khác
+
+      db.query(queryRole, paramsRole, (err, roleResult) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error saving user role');
+        }
+
+        return res.status(200).json({
+          message: 'User updated successfully',
+          user: {
+            id_user: userId,
+            fullname,
+            username,
+            email,
+            phone,
+            avatar,
+            isActive,
+            role
+          }
+        });
+      });
+    });
   });
 });
+
+
 
 
 // API GET để lấy dữ liệu các khóa học (mã hiện tại của bạn)
@@ -303,9 +336,6 @@ app.put('/api/courses/:courseId', upload.single('image'), (req, res) => {
   // Đảm bảo oldImage có đường dẫn đầy đủ
   const oldImagePath = oldImage ? path.join(__dirname, '../uploads/images', path.basename(oldImage)) : null;
 
-  console.log('Đường dẫn ảnh cũ:', oldImagePath);
-  console.log('Tồn tại ảnh cũ:', fs.existsSync(oldImagePath));
-
   // Xóa ảnh cũ nếu có và tồn tại
   if (oldImagePath && fs.existsSync(oldImagePath)) {
     fs.unlink(oldImagePath, (err) => {
@@ -346,7 +376,6 @@ app.put('/api/courses/:courseId', upload.single('image'), (req, res) => {
 
 // API GET để lấy dữ liệu các bài học (mã hiện tại của bạn)
 app.get('/api/lessons', (req, res) => {
-  console.log("query lessons")
   db.query('SELECT ls.*, c.title as course_title, t.fullname '+
     'FROM lesson ls join courses c on ls.course_id = c.id_course join users t on c.teacher_id = t.id_user', (err, results) => {
     if (err) {
@@ -356,26 +385,6 @@ app.get('/api/lessons', (req, res) => {
     res.json(results);
   });
 });
-
-// API GET để lấy dữ liệu các bài học (mã hiện tại của bạn)
-// app.get('/api/lessons', (req, res) => {
-//   console.log("query lessons");
-  
-//   const sql = `
-//     SELECT ls.*, c.title AS course_title
-//     FROM lesson ls 
-//     JOIN courses c ON ls.course_id = c.id_course
-//   `;
-
-//   db.query(sql, (err, results) => {
-//     if (err) {
-//       console.error('Lỗi khi truy vấn dữ liệu:', err);
-//       return res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' });
-//     }
-//     res.json(results);
-//   });
-// });
-
 
 //lesson detail
 app.get('/api/lessons/:id', (req, res) => {
@@ -746,6 +755,20 @@ app.get('/api/answers/by-lesson/:lessonId', (req, res) => {
       res.json(results);
     }
   );
+});
+// Xóa câu hỏi + đáp án liên quan
+app.delete('/api/questions/:id', async (req, res) => {
+  const questionId = req.params.id;
+
+  try {
+    await db.promise().query('DELETE FROM answers WHERE question_id = ?', [questionId]);
+    await db.promise().query('DELETE FROM questions WHERE id_question = ?', [questionId]);
+
+    res.json({ message: 'Xóa câu hỏi và đáp án thành công!' });
+  } catch (error) {
+    console.error('Lỗi khi xóa câu hỏi:', error);
+    res.status(500).json({ message: 'Lỗi máy chủ khi xóa câu hỏi.' });
+  }
 });
 
 // Khởi động server

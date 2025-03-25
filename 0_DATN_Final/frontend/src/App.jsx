@@ -27,6 +27,9 @@ import AddLesson from "./admin/lessons/AddLesson";
 import TeacherDashboard from "./teacher/TeacherDashboard";
 import Result from "./pages/Result.jsx";
 import AddQuestion from "./admin/questions/AddQuestion.jsx";
+import ListCoursesTeacher from "./teacher/courses/ListCoursesTeacher.jsx";
+import ListLessonTeacher from "./teacher/lesson/ListLessonTeacher.jsx";
+import ListQATeacher from "./teacher/question_answers/ListQATeacher.jsx";
 function App() {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
@@ -80,7 +83,8 @@ function App() {
   return (
     <MyContext.Provider value={{ role, setRole }}>
       <div className="App">
-        {!(location.pathname.includes("/admin") || location.pathname.includes("/teacher")) && <Navbar />}
+      {(role !== "admin" && role !== "teacher") && <Navbar />}
+
         <Routes>
           <Route path="/" element={<Header />} />
           <Route path="/login" element={<Login />} />
@@ -114,6 +118,9 @@ function App() {
           {/* 🔹 Protected Teacher Routes */}
           <Route element={<ProtectedRoute allowedRoles={["teacher"]} />}>
             <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+            <Route path="/teacher/mycourses" element={<ListCoursesTeacher />} />
+            <Route path="/teacher/mylesson" element={<ListLessonTeacher />} />
+            <Route path="/teacher/myQA" element={<ListQATeacher />} />
           </Route>
         </Routes>
       </div>

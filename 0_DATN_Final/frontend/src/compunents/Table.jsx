@@ -10,7 +10,7 @@ const Table = (Props) => {
     return (
         <div className="overflow-x-auto shadow-blue-950">
             <div className="min-w-full border border-gray-300 rounded-lg">
-                <div className="flex bg-blue-600 font-semibold">
+                <div className="flex  bg-blue-600 font-semibold">
                     {headers.map((header) => (
                         <div key={header} className="w-[200px] flex-1 p-3 border-r border-gray-300 text-white last:border-r-0 text-sm">
                             {header}

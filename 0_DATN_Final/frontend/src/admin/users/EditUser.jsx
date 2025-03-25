@@ -65,6 +65,8 @@ function EditUser() {
       formData.append('avatar', user.avatar);
       formData.append('oldAvatar', oldAvatar);
       formData.append('isActive', user.isActive ? 'Hoạt động' : 'Không hoạt động');
+      // Thêm trường role để cập nhật vào bảng user_role
+      formData.append('role', user.role);
 
       const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
         method: 'PUT',
@@ -161,8 +163,20 @@ function EditUser() {
                     <option value="Không hoạt động">Không hoạt động</option>
                   </select>
                 </div>
+                {/* Thêm trường chọn Role */}
+                <div>
+                  <label className="block text-gray-600 font-medium">Role:</label>
+                  <select
+                    id="role"
+                    value={user.role}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                  >
+                    <option value="teacher">Teacher</option>
+                    <option value="user">User</option>
+                  </select>
+                </div>
               </div>
-
               <div className="mt-6 flex justify-between">
                 <button
                   onClick={() => navigate('/list-user')}
@@ -184,4 +198,5 @@ function EditUser() {
     </div>
   );
 }
+
 export default EditUser;
