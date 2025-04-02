@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import '../css/css_pages/Contact.css'
+import Footer from "../compunents/Footer";
 function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -28,6 +29,8 @@ function Contact() {
   };
 
   return (
+    <div className="contact-container">
+
     <div className="contact-container-contact">
       <h2 className="title-contact">Liên Hệ</h2>
       <form onSubmit={handleSubmit} className="form-contact">
@@ -68,6 +71,9 @@ function Contact() {
       </form>
       {status && <p className="status-message-contact">{status}</p>}
     </div>
+    <Footer/>
+    </div>
+
   );
 }
 

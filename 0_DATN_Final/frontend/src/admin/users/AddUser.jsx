@@ -11,7 +11,7 @@ function AddUser() {
   const [phone, setPhone] = useState('');
   const [avatar, setAvatar] = useState(null);
   const [isActive, setIsActive] = useState(true);
-  const [preview, setPreview] = useState(null); // Ảnh preview
+  const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -67,108 +67,108 @@ function AddUser() {
       <div className="flex-1 flex flex-col">
         <NavbarAdmin />
 
-        <div className="flex justify-center items-center h-full p-6 mt-16">
-          <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row overflow-hidden">
-
-            {/* ẢNH BÊN TRÁI */}
-            <div className="md:w-1/3 w-full bg-gray-100 flex flex-col items-center justify-start p-4">
-              <div className="w-40 h-40 border rounded-full overflow-hidden">
+        <div className="flex justify-center items-start p-8 mt-20">
+          <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+            
+            {/* AVATAR */}
+            <div className="md:w-1/3 w-full bg-gray-100 p-6 flex flex-col items-center justify-center">
+              <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-300 shadow">
                 <img
                   src={preview || "https://via.placeholder.com/150"}
                   alt="Avatar Preview"
                   className="w-full h-full object-cover"
                 />
               </div>
+              <label className="mt-4 block text-sm text-gray-700 font-medium">Ảnh đại diện:</label>
               <input
                 type="file"
-                id="avatar"
                 onChange={handleAvatarChange}
-                className="mt-4 text-sm"
+                className="mt-2 text-sm text-gray-600 file:mr-4 file:py-1 file:px-2 file:border file:rounded file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
             </div>
 
-            {/* FORM BÊN PHẢI */}
-            <div className="md:w-2/3 w-full p-4 space-y-4">
-              <h2 className="text-2xl font-semibold text-gray-700 text-center md:text-left">Thêm người dùng</h2>
+            {/* FORM */}
+            <div className="md:w-2/3 w-full p-6">
+              <h2 className="text-2xl font-semibold text-gray-700 mb-4">Thêm người dùng</h2>
 
               {message && (
-                <div className={`text-center p-3 rounded ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                <div className={`mb-4 p-3 rounded text-sm text-center font-medium ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                   {message}
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-gray-600 font-medium">Họ và tên:</label>
+                  <label className="block text-gray-600 font-medium mb-1">Họ và tên:</label>
                   <input
                     type="text"
                     value={fullname}
                     onChange={(e) => setFullname(e.target.value)}
                     required
-                    className="w-full p-2 border rounded"
+                    className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 font-medium">Tên đăng nhập:</label>
+                  <label className="block text-gray-600 font-medium mb-1">Tên đăng nhập:</label>
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-                    className="w-full p-2 border rounded"
+                    className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 font-medium">Mật khẩu:</label>
+                  <label className="block text-gray-600 font-medium mb-1">Mật khẩu:</label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full p-2 border rounded"
+                    className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 font-medium">Email:</label>
+                  <label className="block text-gray-600 font-medium mb-1">Email:</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full p-2 border rounded"
+                    className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 font-medium">Số điện thoại:</label>
+                  <label className="block text-gray-600 font-medium mb-1">Số điện thoại:</label>
                   <input
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required
-                    className="w-full p-2 border rounded"
+                    className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 font-medium">Trạng thái:</label>
+                  <label className="block text-gray-600 font-medium mb-1">Trạng thái:</label>
                   <select
                     value={isActive ? 'true' : 'false'}
                     onChange={(e) => setIsActive(e.target.value === 'true')}
-                    className="w-full p-2 border rounded"
+                    className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   >
                     <option value="true">Hoạt động</option>
                     <option value="false">Không hoạt động</option>
                   </select>
                 </div>
 
-                <div className="flex justify-end mt-4">
+                <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    className="px-6 py-2 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 shadow transition-all duration-200"
                   >
                     Thêm người dùng
                   </button>

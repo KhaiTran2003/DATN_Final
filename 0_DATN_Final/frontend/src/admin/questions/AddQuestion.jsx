@@ -11,7 +11,6 @@ function AddQuestion() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -109,16 +108,20 @@ function AddQuestion() {
       <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex-1 flex flex-col">
         <NavbarAdmin />
-        <div className="p-6 max-w-5xl w-full mx-auto mt-20">
-          <h2 className="text-2xl font-bold mb-4">Thêm / Cập nhật câu hỏi & đáp án</h2>
+
+        <div className="p-6 max-w-5xl w-full mx-auto mt-24">
+          <h2 className="text-3xl font-bold text-blue-700 mb-6 text-center">Thêm / Cập nhật câu hỏi & đáp án</h2>
 
           {message && (
-            <div className={`p-3 mb-4 rounded text-center ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+            <div className={`p-4 mb-6 rounded-lg font-medium text-center ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
               {message}
             </div>
           )}
 
-          <select onChange={(e) => handleLessonSelect(e.target.value)} className="mb-4 p-2 border rounded">
+          <select
+            onChange={(e) => handleLessonSelect(e.target.value)}
+            className="mb-6 px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
             <option value="">-- Chọn bài học --</option>
             {lessons.map((lesson) => (
               <option key={lesson.id_lesson} value={lesson.id_lesson}>{lesson.title}</option>
@@ -126,62 +129,80 @@ function AddQuestion() {
           </select>
 
           {questions.map((q, qIndex) => (
-            <div key={q.id_question} className="border p-4 mb-4 shadow rounded bg-white">
-              <input
-                type="text"
-                placeholder="Nội dung câu hỏi"
-                value={q.content}
-                onChange={(e) => handleQuestionChange(qIndex, 'content', e.target.value)}
-                className="w-full mb-2 p-2 border rounded"
-              />
+            <div key={q.id_question} className="border border-blue-300 bg-white p-6 mb-6 rounded-2xl shadow">
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Nội dung câu hỏi"
+                  value={q.content}
+                  onChange={(e) => handleQuestionChange(qIndex, 'content', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                />
 
-              <input
-                type="text"
-                placeholder="Loại (text/audio)"
-                value={q.type}
-                onChange={(e) => handleQuestionChange(qIndex, 'type', e.target.value)}
-                className="w-full mb-2 p-2 border rounded"
-              />
-
-              <input
-                type="text"
-                placeholder="URL audio (nếu có)"
-                value={q.url}
-                onChange={(e) => handleQuestionChange(qIndex, 'url', e.target.value)}
-                className="w-full mb-4 p-2 border rounded"
-              />
-
-              <h4 className="font-semibold mb-2">Đáp án:</h4>
-              {(answers[q.id_question] || []).map((ans, aIndex) => (
-                <div key={aIndex} className="flex items-center mb-2 gap-2">
+                <div className="flex gap-4">
                   <input
-                    type="radio"
-                    name={`correct-${q.id_question}`}
-                    checked={ans.is_correct === 1}
-                    onChange={() => handleCorrectSelect(q.id_question, aIndex)}
+                    type="text"
+                    placeholder="Loại (text/audio)"
+                    value={q.type}
+                    onChange={(e) => handleQuestionChange(qIndex, 'type', e.target.value)}
+                    className="w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                   />
                   <input
                     type="text"
-                    value={ans.content}
-                    onChange={(e) => handleAnswerChange(q.id_question, aIndex, 'content', e.target.value)}
-                    placeholder="Nội dung đáp án"
-                    className="flex-1 p-2 border rounded"
+                    placeholder="URL audio (nếu có)"
+                    value={q.url}
+                    onChange={(e) => handleQuestionChange(qIndex, 'url', e.target.value)}
+                    className="w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                   />
                 </div>
-              ))}
 
-              <button
-                onClick={() => addAnswer(q.id_question)}
-                className="text-sm text-blue-600 hover:underline"
-              >
-                + Thêm đáp án
-              </button>
+                <h4 className="font-semibold text-blue-600">Đáp án:</h4>
+                {(answers[q.id_question] || []).map((ans, aIndex) => (
+                  <div key={aIndex} className="flex items-center gap-3 mb-3">
+                    <input
+                      type="radio"
+                      name={`correct-${q.id_question}`}
+                      checked={ans.is_correct === 1}
+                      onChange={() => handleCorrectSelect(q.id_question, aIndex)}
+                      className="text-blue-600 focus:ring-blue-500"
+                    />
+                    <input
+                      type="text"
+                      value={ans.content}
+                      onChange={(e) => handleAnswerChange(q.id_question, aIndex, 'content', e.target.value)}
+                      placeholder="Nội dung đáp án"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    />
+                    {ans.is_correct === 1 && (
+                      <span className="text-green-600 text-xs font-medium ml-1">✔ Đáp án đúng</span>
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  onClick={() => addAnswer(q.id_question)}
+                  className="text-sm text-blue-600 hover:underline mt-2"
+                >
+                  + Thêm đáp án
+                </button>
+              </div>
             </div>
           ))}
 
-          <div className="mt-6 flex gap-4">
-            <button onClick={handleAddQuestion} className="bg-gray-300 px-4 py-2 rounded">+ Thêm câu hỏi</button>
-            <button onClick={handleSubmit} className="bg-blue-600 text-white px-4 py-2 rounded">Lưu tất cả</button>
+          <div className="mt-8 flex justify-between">
+            <button
+              onClick={handleAddQuestion}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2 rounded-md font-medium transition"
+            >
+              + Thêm câu hỏi
+            </button>
+
+            <button
+              onClick={handleSubmit}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-semibold shadow-md transition"
+            >
+              💾 Lưu tất cả
+            </button>
           </div>
         </div>
       </div>

@@ -490,18 +490,39 @@ app.get('/api/reviews', (req, res) => {
   });
 });
 
+
 app.get('/api/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
+  const sql = `
+    SELECT 
+      u.*, 
+      r.name AS role 
+    FROM users u
+    LEFT JOIN user_role ur ON u.id_user = ur.id_user
+    LEFT JOIN role r ON ur.id_role = r.id_role
+  `;
+
+  db.query(sql, (err, results) => {
     if (err) {
       console.error('Lỗi khi truy vấn dữ liệu:', err);
       return res.status(500).json({ message: 'Lỗi khi lấy dữ liệu', error: err.message });
     }
+
     if (results.length === 0) {
       return res.status(404).json({ message: 'Không có người dùng nào' });
     }
-    res.json(results);
+
+    // Format avatar thành URL đầy đủ
+    const users = results.map((user) => {
+      if (user.avatar && !user.avatar.startsWith('http')) {
+        user.avatar = `${baseUrl}/${user.avatar}`;
+      }
+      return user;
+    });
+
+    res.json(users);
   });
 });
+
 
 // API GET để lấy dữ liệu các answers(mã hiện tại của bạn)
 app.get('/api/answers', (req, res) => {

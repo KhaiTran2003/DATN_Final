@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NavbarAdmin from "./NavbarAdmin";  // import file navbar, bạn có thể thay bằng file thật
+import NavbarAdmin from "./NavbarAdmin";
 import SidebarAdmin from "./SidebarAdmin";
 
 import {
@@ -8,7 +8,6 @@ import {
 } from "recharts";
 
 function AdminDashboard() {
-  // State lưu dữ liệu người dùng, khoá học, bài học, câu hỏi
   const [data, setData] = useState({
     users: [],
     courses: [],
@@ -16,14 +15,10 @@ function AdminDashboard() {
     questions: [],
   });
 
-  // Quản lý trạng thái sidebar (mở / đóng)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-  // Trạng thái loading & error khi fetch API
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Gọi API lấy dữ liệu
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,11 +56,9 @@ function AdminDashboard() {
     fetchData();
   }, []);
 
-  // Xử lý khi dữ liệu đang tải hoặc lỗi
   if (loading) return <div className="text-center mt-20">Đang tải dữ liệu...</div>;
   if (error) return <div className="text-center text-red-500 mt-20">{error}</div>;
 
-  // Chuẩn bị dữ liệu cho biểu đồ
   const statsData = [
     { name: "Users", value: data.users.length },
     { name: "Courses", value: data.courses.length },
@@ -75,63 +68,51 @@ function AdminDashboard() {
 
   const pieColors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-  // Hàm toggle sidebar
   const handleToggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
   return (
     <div className="flex">
-      {/* Sidebar cố định, truyền isSidebarOpen & toggleSidebar */}
-      <SidebarAdmin
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={handleToggleSidebar}
-      />
+      <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={handleToggleSidebar} />
 
-      {/* Phần nội dung chính: lề trái thay đổi tùy trạng thái sidebar */}
       <div
-        className={`
-          flex-1 min-h-screen bg-gray-100
-          ${isSidebarOpen ? "ml-[250px]" : "ml-[70px]"}
-          mt-[88px] p-6
-          transition-all duration-300
-        `}
+        className={`flex-1 min-h-screen bg-gray-100 ${isSidebarOpen ? "ml-[250px]" : "ml-[70px]"} mt-[88px] p-6 transition-all duration-300`}
       >
-        {/* Navbar ở trên (bạn có thể thay đổi tùy ý) */}
         <NavbarAdmin />
 
-        {/* Thống kê tổng quan */}
-        <div className="grid grid-cols-4 gap-4">
+        {/* Stats cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {statsData.map((item, index) => (
             <div
               key={index}
-              className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center"
+              className="bg-gradient-to-r from-blue-600 to-blue-400 text-white p-5 rounded-xl shadow-md hover:scale-[1.03] transition transform duration-300"
             >
-              <h3 className="text-xl font-semibold">{item.name}</h3>
-              <p className="text-3xl font-bold text-blue-500">{item.value}</p>
+              <h3 className="text-lg font-semibold mb-1 tracking-wide">{item.name}</h3>
+              <p className="text-3xl font-bold">{item.value}</p>
             </div>
           ))}
         </div>
 
-        {/* Biểu đồ */}
-        <div className="grid grid-cols-2 gap-6 mt-6">
-          {/* Biểu đồ đường */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Thống kê hoạt động</h3>
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+          {/* Line Chart */}
+          <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+            <h3 className="text-xl font-semibold mb-4 text-blue-600">Biểu đồ hoạt động</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={statsData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                <Line type="monotone" dataKey="value" stroke="#007bff" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Biểu đồ tròn */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Tỷ lệ thành phần</h3>
+          {/* Pie Chart */}
+          <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+            <h3 className="text-xl font-semibold mb-4 text-blue-600">Tỷ lệ phân bổ</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -141,14 +122,10 @@ function AdminDashboard() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  fill="#8884d8"
                   label
                 >
                   {statsData.map((_, index) => (
-                    <Cell
-                      key={index}
-                      fill={pieColors[index % pieColors.length]}
-                    />
+                    <Cell key={index} fill={pieColors[index % pieColors.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -156,22 +133,16 @@ function AdminDashboard() {
             </ResponsiveContainer>
           </div>
 
-          {/* Biểu đồ vùng (AreaChart) */}
-          <div className="col-span-2 bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Xu hướng dữ liệu</h3>
+          {/* Area Chart */}
+          <div className="col-span-1 lg:col-span-2 bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+            <h3 className="text-xl font-semibold mb-4 text-blue-600">Biểu đồ xu hướng</h3>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={statsData}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#8884d8"
-                  fillOpacity={1}
-                  fill="#8884d8"
-                />
+                <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="#8884d8" />
                 <Legend />
               </AreaChart>
             </ResponsiveContainer>

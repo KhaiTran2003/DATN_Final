@@ -5,6 +5,7 @@ import Navbar from "./compunents/Navbar";
 import Login from "./compunents/Login";
 import Signup from "./compunents/Signup";
 import Header from "./compunents/Header";
+import Footer from "./compunents/Footer.jsx";
 import HomePage from "./pages/Home";
 import Courses from "./pages/Courses";
 import Reviews from "./pages/Reviews";
@@ -30,6 +31,7 @@ import AddQuestion from "./admin/questions/AddQuestion.jsx";
 import ListCoursesTeacher from "./teacher/courses/ListCoursesTeacher.jsx";
 import ListLessonTeacher from "./teacher/lesson/ListLessonTeacher.jsx";
 import ListQATeacher from "./teacher/question_answers/ListQATeacher.jsx";
+import AuthPage from "./compunents/AuthPage.jsx";
 function App() {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
@@ -95,6 +97,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/lesson" element={<Lesson />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/auth" element={<AuthPage />} />
+          
 
           {/* 🔹 Protected Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>

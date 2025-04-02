@@ -1,48 +1,101 @@
 import React, { useEffect, useState } from 'react';
 import CourseCard from './CourseCard';
 import '../css/css_pages/Courses.css';
-import { Link, useNavigate } from 'react-router-dom';
+import Footer from '../compunents/Footer';
+import { useNavigate } from 'react-router-dom';
+
 function Courses() {
-  const [courses, setCourses] = useState([]);
-  const [courseId,setCourseId] = useState(null)
-  const [lessons, setLessons] = useState([])
-  const navigate = useNavigate()
+  const [allCourses, setAllCourses] = useState([]);
+  const [freeCourses, setFreeCourses] = useState([]);
+  const [paidCourses, setPaidCourses] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [filteredFree, setFilteredFree] = useState([]);
+  const [filteredPaid, setFilteredPaid] = useState([]);
+  const [showMoreFree, setShowMoreFree] = useState(false);
+  const [showMorePaid, setShowMorePaid] = useState(false);
+  const [courseId, setCourseId] = useState(null);
+  const [lessons, setLessons] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/courses') // Gọi API lấy danh sách khóa học
-      .then((res) => res.json())
-      .then((data) => setCourses(data)) // Cập nhật state với dữ liệu từ API
-      .catch((err) => console.error('Lỗi khi lấy dữ liệu khóa học:', err));
+    fetch('http://localhost:5000/api/courses')
+      .then(res => res.json())
+      .then(data => {
+        setAllCourses(data);
+        const free = data.filter(c => c.price === 0 || c.price === 'free');
+        const paid = data.filter(c => c.price !== 0 && c.price !== 'free');
+        setFreeCourses(free);
+        setPaidCourses(paid);
+        setFilteredFree(free);
+        setFilteredPaid(paid);
+      });
   }, []);
 
   useEffect(() => {
-    if (!courseId) return; // đảm bảo courseId tồn tại
-  
+    if (!courseId) return;
+
     const fetchLessons = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/courses/${courseId}/lessons`);
         if (!res.ok) throw new Error('Lỗi khi lấy dữ liệu từ server');
         const data = await res.json();
         setLessons(data);
-        console.log(data);
       } catch (err) {
         console.error('Lỗi khi lấy dữ liệu bài học:', err);
       }
     };
-  
+
     fetchLessons();
   }, [courseId]);
+
   const closeModal = () => {
     setCourseId(null);
     setLessons([]);
   };
+
+  const handleSearchChange = (e) => {
+    const keyword = e.target.value.toLowerCase();
+    setSearchKeyword(keyword);
+
+    if (!keyword.trim()) {
+      setFilteredFree(freeCourses);
+      setFilteredPaid(paidCourses);
+      return;
+    }
+
+    const filter = (list) =>
+      list.filter((c) =>
+        c.title?.toLowerCase().includes(keyword) ||
+        c.description?.toLowerCase().includes(keyword) ||
+        c.duration?.toString().includes(keyword)
+      );
+
+    setFilteredFree(filter(freeCourses));
+    setFilteredPaid(filter(paidCourses));
+  };
+
   return (
-    <div id='courses'>
-      <h1>Khóa học</h1>
-      <div className="a-container">
-        {courses.length > 0 ? (
-          courses.map((course) => (
-          <div key={course.id_course} onClick={(e,id = course.id_course) => {setCourseId(id); console.log(id)}} className='cursor-pointer'>
+    <div className="courses-page">
+      <div className="courses-header">
+        <h1>📘 Danh sách khóa học</h1>
+        <p>Chọn một khóa để xem chi tiết bài học</p>
+      </div>
+
+      <div className="courses-search">
+        <input
+          type="text"
+          placeholder="🔍 Tìm kiếm khóa học..."
+          value={searchKeyword}
+          onChange={handleSearchChange}
+          className="search-input"
+        />
+      </div>
+
+      {/* FREE COURSES */}
+      <h2 className="section-title">🎓 Khóa học miễn phí</h2>
+      <div className="courses-grid">
+        {(showMoreFree ? filteredFree : filteredFree.slice(0, 5)).map((course) => (
+          <div key={course.id_course} onClick={() => setCourseId(course.id_course)} className="course-clickable">
             <CourseCard
               image={`http://localhost:5000${course.image}`}
               title={course.title}
@@ -51,38 +104,67 @@ function Courses() {
               duration={course.duration}
             />
           </div>
-        ))
-
-        ) : (
-          <p>Không có khóa học nào</p>
-        )}
+        ))}
       </div>
-      {/* Modal hiển thị danh sách bài học */}
-      {courseId != null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 bg-opacity-50">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[80vh] overflow-y-auto p-6 relative animate-fadeIn">
-            <button
-              onClick={closeModal}
-              className="absolute top-3 right-4 text-gray-500 hover:text-black text-2xl font-bold cursor-pointer"
-            >
+      {filteredFree.length > 5 && !showMoreFree && (
+        <div className="see-more-wrapper">
+          <button className="see-more-btn" onClick={() => setShowMoreFree(true)}>
+            Hiển thị thêm {filteredFree.length - 5}
+          </button>
+        </div>
+      )}
+
+      {/* PAID COURSES */}
+      <h2 className="section-title">💼 Khóa học có phí</h2>
+      <div className="courses-grid">
+        {(showMorePaid ? filteredPaid : filteredPaid.slice(0, 5)).map((course) => (
+          <div key={course.id_course} onClick={() => setCourseId(course.id_course)} className="course-clickable">
+            <CourseCard
+              image={`http://localhost:5000${course.image}`}
+              title={course.title}
+              description={course.description}
+              price={course.price}
+              duration={course.duration}
+            />
+          </div>
+        ))}
+      </div>
+      {filteredPaid.length > 5 && !showMorePaid && (
+        <div className="see-more-wrapper">
+          <button className="see-more-btn" onClick={() => setShowMorePaid(true)}>
+            Hiển thị thêm {filteredPaid.length - 5}
+          </button>
+        </div>
+      )}
+
+      {/* MODAL HIỂN THỊ BÀI HỌC */}
+      {courseId !== null && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <button onClick={closeModal} className="modal-close">
               &times;
             </button>
-            <h2 className="text-2xl font-semibold mb-4">Danh sách bài học</h2>
+            <h2 className="modal-title">📑 Danh sách bài học</h2>
             {lessons.length > 0 ? (
-              <ul className="space-y-2">
+              <ul className="lesson-list">
                 {lessons.map((lesson) => (
-                  <li key={lesson.id_lesson} className="p-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition cursor-pointer"
-                  onClick={()=>{navigate(`/lesson/?id=${lesson.id_lesson}`)}}>
+                  <li
+                    key={lesson.id_lesson}
+                    className="lesson-item"
+                    onClick={() => navigate(`/lesson/?id=${lesson.id_lesson}`)}
+                  >
                     {lesson.title}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-500">Không có bài học nào</p>
+              <p className="text-gray-500">Không có bài học nào.</p>
             )}
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }

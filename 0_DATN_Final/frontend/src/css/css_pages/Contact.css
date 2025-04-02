@@ -1,52 +1,113 @@
+/* Toàn bộ vùng liên hệ */
+.contact-container{
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../../images/banner.jpg');  padding: 40px 30px;
+}
 .contact-container-contact {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 10px;
-    background: #f9f9f9;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
+  max-width: 600px;
+  margin: 60px auto;
+    background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  padding-bottom: 110px;
+
+}
+
+/* Tiêu đề */
+.title-contact {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 24px;
+}
+
+/* Form tổng */
+.form-contact {
   
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Group input + label */
+.input-group-contact {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label */
+.label-contact {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+/* Input & Textarea */
+.input-contact,
+.textarea-contact {
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s ease;
+  font-family: inherit;
+}
+
+.input-contact:focus,
+.textarea-contact:focus {
+  border-color: #0d47a1;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+}
+
+/* Textarea riêng */
+.textarea-contact {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Nút gửi */
+.submit-btn-contact {
+  background-color: #0d47a1;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn-contact:hover {
+  background-color: #1565c0;
+}
+
+/* Trạng thái gửi thành công hoặc lỗi */
+.status-message-contact {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #0d47a1;
+}
+
+/* Responsive mobile */
+@media screen and (max-width: 480px) {
+  .contact-container-contact {
+    padding: 30px 20px;
+    margin: 30px 16px;
+  }
+
   .title-contact {
-    margin-bottom: 20px;
+    font-size: 22px;
   }
-  
-  .input-group-contact {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .label-contact {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .input-contact,
-  .textarea-contact {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
+
   .submit-btn-contact {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    font-size: 15px;
   }
-  
-  .submit-btn-contact:hover {
-    background-color: #0056b3;
-  }
-  
-  .status-message-contact {
-    margin-top: 10px;
-    font-weight: bold;
-  }
-  
+}

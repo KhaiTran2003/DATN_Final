@@ -10,6 +10,10 @@ function UserDetail() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
@@ -24,16 +28,12 @@ function UserDetail() {
     fetchUserDetail();
   }, [userId]);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   if (error) {
-    return <div className="text-red-500 text-center mt-5">{error}</div>;
+    return <div className="text-red-500 text-center mt-10">{error}</div>;
   }
 
   if (!user) {
-    return <div className="text-center text-gray-500 mt-5">Đang tải thông tin người dùng...</div>;
+    return <div className="text-center text-gray-500 mt-10">Đang tải thông tin người dùng...</div>;
   }
 
   return (
@@ -41,58 +41,87 @@ function UserDetail() {
       <SidebarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <div className="flex-1 flex flex-col">
         <NavbarAdmin />
-        <div className="flex justify-center items-center h-full p-6 mt-16">
-          <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 flex">
-            <div className="w-1/3 flex flex-col justify-center items-center">
-              <img
-                src={`http://localhost:5000/${user.avatar}`}
-                alt="Avatar"
-                className="w-40 h-40 object-cover rounded-full border"
-              />
-              <p className="mt-4 font-medium text-gray-700">{user.username}</p>
+        <div className="flex justify-center items-start p-8 mt-20">
+          <div className="w-full max-w-5xl bg-white shadow-lg rounded-2xl p-6 flex flex-col md:flex-row gap-6">
+            
+            {/* AVATAR + TÊN */}
+            <div className="md:w-1/3 w-full flex flex-col items-center justify-start">
+              <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-300 shadow">
+                <img
+                  src={user.avatar ? `http://localhost:5000/${user.avatar}` : 'https://via.placeholder.com/150'}
+                  alt="Avatar"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="mt-4 font-semibold text-lg text-gray-700">{user.username}</p>
             </div>
-            <div className="w-2/3 pl-6">
-              <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">Chi tiết người dùng</h2>
+
+            {/* THÔNG TIN */}
+            <div className="md:w-2/3 w-full">
+              <h2 className="text-2xl font-semibold text-blue-700 mb-6 text-center md:text-left">Chi tiết người dùng</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-gray-600 font-medium">Họ và tên:</label>
-                  <input type="text" value={user.fullname} disabled className="w-full p-2 border rounded bg-gray-100" />
+                  <label className="block text-gray-600 font-medium mb-1">Họ và tên:</label>
+                  <input
+                    type="text"
+                    value={user.fullname}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-700 shadow-sm"
+                  />
                 </div>
                 <div>
-                  <label className="block text-gray-600 font-medium">Email:</label>
-                  <input type="text" value={user.email} disabled className="w-full p-2 border rounded bg-gray-100" />
+                  <label className="block text-gray-600 font-medium mb-1">Email:</label>
+                  <input
+                    type="text"
+                    value={user.email}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-700 shadow-sm"
+                  />
                 </div>
                 <div>
-                  <label className="block text-gray-600 font-medium">Số điện thoại:</label>
-                  <input type="text" value={user.phone} disabled className="w-full p-2 border rounded bg-gray-100" />
+                  <label className="block text-gray-600 font-medium mb-1">Số điện thoại:</label>
+                  <input
+                    type="text"
+                    value={user.phone}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-700 shadow-sm"
+                  />
                 </div>
                 <div>
-                  <label className="block text-gray-600 font-medium">Trạng thái:</label>
-                  <select disabled value={user.is_active ? 'Hoạt động' : 'Không hoạt động'} className="w-full p-2 border rounded bg-gray-100">
+                  <label className="block text-gray-600 font-medium mb-1">Trạng thái:</label>
+                  <select
+                    disabled
+                    value={user.is_active ? 'Hoạt động' : 'Không hoạt động'}
+                    className="w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-700 shadow-sm"
+                  >
                     <option value="Hoạt động">Hoạt động</option>
                     <option value="Không hoạt động">Không hoạt động</option>
                   </select>
                 </div>
               </div>
-              <div className="mt-6 flex justify-between">
+
+              {/* BUTTONS */}
+              <div className="mt-8 flex justify-between">
                 <button
                   onClick={() => navigate('/list-user')}
-                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                  className="px-5 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition"
                 >
-                  Quay lại danh sách
+                  ← Quay lại
                 </button>
                 <Link
                   to={`/edit-user/${user.id_user}`}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
                 >
-                  Sửa
+                  Sửa thông tin
                 </Link>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
   );
 }
+
 export default UserDetail;

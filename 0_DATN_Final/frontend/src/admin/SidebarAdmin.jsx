@@ -2,96 +2,70 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function SidebarAdmin({ isSidebarOpen, toggleSidebar }) {
-  const navigate = useNavigate(); // Điều hướng trang
+  const navigate = useNavigate();
 
-  // Xử lý Logout
   const handleLogout = () => {
-    localStorage.removeItem("userId"); // Xóa userId
-    sessionStorage.clear(); // Xóa toàn bộ session
-    caches.keys().then((names) => names.forEach((name) => caches.delete(name))); // Xóa cache trình duyệt
-  
-    // Chặn Back về trang trước
+    localStorage.removeItem("userId");
+    sessionStorage.clear();
+    caches.keys().then((names) => names.forEach((name) => caches.delete(name)));
     window.history.replaceState(null, "", window.location.href);
-    window.location.href = "/login"; // Điều hướng về trang login
+    window.location.href = "/login";
   };
-  
 
   return (
-    <div
-      className={`fixed top-0 left-0 h-full bg-gray-900 text-white
-                  transition-all duration-300
-                  ${isSidebarOpen ? 'w-64' : 'w-16'}
+    <aside
+      className={`fixed top-0 left-0 h-full bg-gradient-to-b from-blue-800 to-blue-900 text-white shadow-lg transition-all duration-300
+        ${isSidebarOpen ? 'w-64' : 'w-20'}
       `}
     >
-      {/* Thanh trên cùng của sidebar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-        {/* Tiêu đề hiển thị khi sidebar mở */}
-        <h2
-          className={`text-lg font-semibold transition-opacity
-                      ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}
-          `}
-        >
-          Admin Panel
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-4 border-b border-blue-700">
+        <h2 className={`text-lg font-bold tracking-wide transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+          ADMIN
         </h2>
 
-        {/* Nút thu nhỏ / phóng to */}
         <button
           onClick={toggleSidebar}
-          className="
-            text-white
-            focus:outline-none
-            text-xl
-            bg-gray-700
-            hover:bg-gray-600
-            px-2 py-1
-            rounded
-            transition-colors
-            duration-300
-          "
+          className="text-white text-xl hover:bg-blue-700 px-2 py-1 rounded transition"
         >
           {isSidebarOpen ? '✕' : '☰'}
         </button>
       </div>
 
-      {/* Danh sách menu */}
-      <ul className="mt-4">
+      {/* Menu */}
+      <ul className="mt-4 space-y-1 text-sm font-medium">
         <SidebarItem to="/admin-dashboard" icon="fas fa-tachometer-alt" label="Dashboard" isSidebarOpen={isSidebarOpen} />
         <SidebarItem to="/list-user" icon="fas fa-users" label="Người dùng" isSidebarOpen={isSidebarOpen} />
         <SidebarItem to="/list-course" icon="fas fa-book-open" label="Khóa học" isSidebarOpen={isSidebarOpen} />
         <SidebarItem to="/list-lesson" icon="fas fa-chalkboard-teacher" label="Bài học" isSidebarOpen={isSidebarOpen} />
         <SidebarItem to="/list-question" icon="fas fa-question-circle" label="Câu hỏi" isSidebarOpen={isSidebarOpen} />
         <SidebarItem to="/list-answer" icon="fas fa-check-circle" label="Đáp án" isSidebarOpen={isSidebarOpen} />
-        <SidebarItem to="/learning-path" icon="fas fa-map-signs" label="Learning Path" isSidebarOpen={isSidebarOpen} />
-        <SidebarItem to="/progress" icon="fas fa-trophy" label="Progress" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/learning-path" icon="fas fa-map-signs" label="Lộ trình" isSidebarOpen={isSidebarOpen} />
+        <SidebarItem to="/progress" icon="fas fa-trophy" label="Tiến độ" isSidebarOpen={isSidebarOpen} />
 
-        {/* Nút Log Out */}
-        <li className="group relative cursor-pointer">
+        {/* Log out */}
+        <li className="mt-4">
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-3 text-white hover:bg-red-600 transition"
+            className="flex items-center w-full px-4 py-3 text-red-100 hover:bg-red-600 hover:text-white transition rounded-md"
           >
-            <i className="fas fa-sign-out-alt text-lg" />
-            <span className={`ml-3 text-sm font-medium transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
-              Log Out
-            </span>
+            <i className="fas fa-sign-out-alt text-base" />
+            <span className={`ml-3 ${isSidebarOpen ? 'block' : 'hidden'}`}>Đăng xuất</span>
           </button>
         </li>
       </ul>
-    </div>
+    </aside>
   );
 }
 
-/* Component hiển thị từng item của Sidebar */
 const SidebarItem = ({ to, icon, label, isSidebarOpen }) => (
-  <li className="group relative">
+  <li>
     <Link
       to={to}
-      className="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition"
+      className="flex items-center px-4 py-3 hover:bg-blue-700 rounded-md transition group"
     >
-      {/* Icon luôn hiển thị */}
-      <i className={`${icon} text-lg`} />
-      {/* Label ẩn khi sidebar đóng */}
-      <span className={`ml-3 text-sm font-medium transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+      <i className={`${icon} text-base group-hover:text-yellow-300`} />
+      <span className={`ml-3 group-hover:text-yellow-300 ${isSidebarOpen ? 'block' : 'hidden'}`}>
         {label}
       </span>
     </Link>

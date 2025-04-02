@@ -9,7 +9,7 @@ function Header(){
                 <h1><span>STUDY</span>WITH US</h1>
                 <p className="details">Học - Học nữa - Học mãi</p>
                 <div className="header-btns">
-                    <Link to="/login" className="header-btn">LOGIN</Link>
+                    <Link to="/auth" className="header-btn">LOGIN</Link>
                 </div>
             </div>
 
